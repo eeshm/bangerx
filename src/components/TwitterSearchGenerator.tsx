@@ -1,26 +1,34 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 // import { Search, Twitter, Copy, ExternalLink, Calendar, User, AlertCircle } from 'lucide-react';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
+import { format } from 'date-fns';
+import { Button } from "./ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 const TwitterSearchGenerator = () => {
   const [username, setUsername] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [untilDate, setUntilDate] = useState('');
+  const [fromDate, setFromDate] = useState<Date | undefined>(undefined);
+  const [untilDate, setUntilDate] = useState<Date | undefined>(undefined);
   const [generatedUrl, setGeneratedUrl] = useState('');
   const [errors, setErrors] = useState<any>({});
   const [copied, setCopied] = useState(false);
+  
+  const formatDate = (date: Date | undefined) => {
+    return date ? format(date, 'yyyy-MM-dd') : '';
+  };
 
-  // Auto-generate URL when inputs change and are valid
   useEffect(() => {
-    if (username && fromDate && untilDate && Object.keys(errors).length === 0) {
+    if (username && fromDate && untilDate && validateInputs()) {
       generateSearchUrl();
     } else {
       setGeneratedUrl('');
     }
-  }, [username, fromDate, untilDate, errors]);
+  }, [username, fromDate, untilDate]);
 
   const validateInputs = () => {
-    const newErrors :any = {};
+    const newErrors: any = {};
 
     // Username validation
     if (!username.trim()) {
@@ -41,19 +49,21 @@ const TwitterSearchGenerator = () => {
     }
 
     if (fromDate && untilDate) {
-      const from = new Date(fromDate);
-      const until = new Date(untilDate);
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-      if (from >= until) {
+      if (fromDate >= untilDate) {
         newErrors.dateRange = 'Start date must be before end date';
       }
-      if (until > today) {
+      if (untilDate > today) {
         newErrors.untilDate = 'End date cannot be in the future';
       }
+      if (fromDate > today) {
+        newErrors.fromDate = 'Start date cannot be in the future';
+      }
       // Twitter's earliest tweets are from 2006
-      if (from < new Date('2006-03-21')) {
-        newErrors.fromDate = 'Date cannot be before March 21, 2006';
+      if (fromDate < new Date('2006-03-21')) {
+        newErrors.fromDate = 'So Sorry! But Twitter was born in March 2006';
       }
     }
 
@@ -65,38 +75,20 @@ const TwitterSearchGenerator = () => {
     if (!validateInputs()) return;
 
     const cleanUsername = username.replace('@', '').trim();
-    const query = `from:${cleanUsername} since:${fromDate} until:${untilDate} -filter:replies`;
+    const formattedFromDate = formatDate(fromDate);
+    const formattedUntilDate = formatDate(untilDate);
+    const query = `from:${cleanUsername} since:${formattedFromDate} until:${formattedUntilDate} -filter:replies`;
     const encodedQuery = encodeURIComponent(query);
     const url = `https://x.com/search?q=${encodedQuery}&src=typed_query&f=top`;
     
     setGeneratedUrl(url);
   };
 
-  const handleUsernameChange = (e:any) => {
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
     if (errors.username) {
       const newErrors = { ...errors };
       delete newErrors.username;
-      setErrors(newErrors);
-    }
-  };
-
-  const handleFromDateChange = (e :any ) => {
-    setFromDate(e.target.value);
-    if (errors.fromDate || errors.dateRange) {
-      const newErrors = { ...errors };
-      delete newErrors.fromDate;
-      delete newErrors.dateRange;
-      setErrors(newErrors);
-    }
-  };
-
-  const handleUntilDateChange = (e :any) => {
-    setUntilDate(e.target.value);
-    if (errors.untilDate || errors.dateRange) {
-      const newErrors = { ...errors };
-      delete newErrors.untilDate;
-      delete newErrors.dateRange;
       setErrors(newErrors);
     }
   };
@@ -116,12 +108,12 @@ const TwitterSearchGenerator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+    <div className="min-h-screen bg-white py-12 px-4 font-mono">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1 className="text-4xl font-bold text-black">
               X Search Generator
             </h1>
           </div>
@@ -131,13 +123,13 @@ const TwitterSearchGenerator = () => {
         </div>
 
         {/* Main Form Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-xl border  border-gray-300 p-8">
           <div className="space-y-6">
             {/* Username Input */}
             <div>
               <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
                 {/* <User className="w-4 h-4 inline mr-2" /> */}
-                Twitter Username
+                X Username
               </label>
               <div className="relative">
                 <input
@@ -146,7 +138,7 @@ const TwitterSearchGenerator = () => {
                   value={username}
                   onChange={handleUsernameChange}
                   placeholder="elonmusk or @elonmusk"
-                  className={`w-full px-4 py-3 border-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`flex h-9 w-full rounded-md border bg-transparent px-3 shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 py-5 ${
                     errors.username ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
                   }`}
                 />
@@ -167,44 +159,74 @@ const TwitterSearchGenerator = () => {
             {/* Date Range */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="fromDate" className="block text-sm font-semibold text-gray-700 mb-2">
-                  {/* <Calendar className="w-4 h-4 inline mr-2" /> */}
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
                   From Date
                 </label>
-                <input
-                  type="date"
-                  id="fromDate"
-                  value={fromDate}
-                  onChange={handleFromDateChange}
-                  className={`w-full px-4 py-3 border-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.fromDate ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal ${
+                        errors.fromDate ? 'border-red-300 bg-red-50' : ''
+                      }`}
+                    >
+                      {fromDate ? format(fromDate, 'PPP') : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-4" align="start">
+                    <DayPicker
+                      captionLayout='dropdown'
+                      navLayout='around'
+                      startMonth={new Date(2006,10)}
+                      endMonth={new Date(2025,11)}
+                      selected={fromDate}
+                      onSelect={setFromDate}
+                      disabled={[
+                        { before: new Date('2006-03-21') },
+                        { after: new Date() }
+                      ]}
+                    />
+                  </PopoverContent>
+                </Popover>
                 {errors.fromDate && (
                   <p className="mt-1 text-sm text-red-600 flex items-center">
-                    {/* <AlertCircle className="w-4 h-4 mr-1" /> */}
                     {errors.fromDate}
                   </p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="untilDate" className="block text-sm font-semibold text-gray-700 mb-2">
-                  {/* <Calendar className="w-4 h-4 inline mr-2" /> */}
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Until Date
                 </label>
-                <input
-                  type="date"
-                  id="untilDate"
-                  value={untilDate}
-                  onChange={handleUntilDateChange}
-                  className={`w-full px-4 py-3 border-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.untilDate ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={`w-full justify-start text-left font-normal ${
+                        errors.untilDate ? 'border-red-300 bg-red-50' : ''
+                      }`}
+                    >
+                      {untilDate ? format(untilDate, 'PPP') : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-4" align="start">
+                    <DayPicker
+                      captionLayout='dropdown'
+                      navLayout='around'
+                      startMonth={new Date(2006,10)}
+                      endMonth={new Date(2025,11)}
+                      selected={untilDate}
+                      onSelect={setUntilDate}
+                      disabled={[
+                        { before: fromDate || new Date('2006-03-21') },
+                        { after: new Date() }
+                      ]}
+                    />
+                  </PopoverContent>
+                </Popover>
                 {errors.untilDate && (
                   <p className="mt-1 text-sm text-red-600 flex items-center">
-                    {/* <AlertCircle className="w-4 h-4 mr-1" /> */}
                     {errors.untilDate}
                   </p>
                 )}
@@ -236,7 +258,7 @@ const TwitterSearchGenerator = () => {
               <div className="flex gap-3">
                 <button
                   onClick={openInNewTab}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="flex-1 bg-black hover:bg-gray-900 hover:scale-[0.98] text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {/* <ExternalLink className="w-4 h-4" /> */}
                   Open in X
@@ -244,10 +266,10 @@ const TwitterSearchGenerator = () => {
                 
                 <button
                   onClick={copyToClipboard}
-                  className={`px-4 py-3 rounded-lg border-2 font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-3  text-white text-center hover:scale-[0.98] rounded-lg w-[calc(100%-80%)] border-2 font-medium transition-colors flex items-center justify-center gap-2 ${
                     copied 
-                      ? 'bg-green-50 border-green-200 text-green-700' 
-                      : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                      ? 'bg-green-400 border-green-200 text-green-700' 
+                      : 'bg-black border-gray-300 text-gray-700 hover:bg-gray-900 hover:text-white cursor-pointer'
                   }`}
                 >
                   {/* <Copy className="w-4 h-4" /> */}
@@ -279,5 +301,6 @@ const TwitterSearchGenerator = () => {
     </div>
   );
 };
+import { DayProps } from 'react-day-picker';
 
 export default TwitterSearchGenerator;
