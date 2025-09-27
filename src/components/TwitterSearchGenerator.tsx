@@ -267,16 +267,13 @@ const TwitterSearchGenerator = () => {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-4" align="start">
                     <DayPicker
-                      captionLayout='dropdown'
+                      captionLayout="dropdown"
+                      mode='single'
                       navLayout='around'
                       startMonth={new Date(2006, 10)}
                       endMonth={new Date(2025, 11)}
                       selected={fromDate}
                       onSelect={setFromDate}
-                      disabled={[
-                        { before: new Date('2006-03-21') },
-                        { after: new Date() }
-                      ]}
                     />
                   </PopoverContent>
                 </Popover>
@@ -305,6 +302,7 @@ const TwitterSearchGenerator = () => {
                     <DayPicker
                       captionLayout='dropdown'
                       navLayout='around'
+                      mode='single'
                       startMonth={new Date(2006, 10)}
                       endMonth={new Date(2025, 11)}
                       selected={untilDate}
@@ -419,7 +417,6 @@ const TwitterSearchGenerator = () => {
             )}
           </div>
           </div>         
-          </div>
           {/* Generated URL Section */}
           {generatedUrl && (
             <div className="mt-8 p-6 bg-gray-50 rounded-xl border-2 border-gray-200">
@@ -448,7 +445,7 @@ const TwitterSearchGenerator = () => {
                   className={`px-4 py-3  text-white text-center hover:scale-[0.98] rounded-lg w-[calc(100%-80%)] border-2 font-medium transition-colors flex items-center justify-center gap-2 ${copied
                     ? 'bg-green-400 border-green-200 text-green-700'
                     : 'bg-black border-gray-300 text-gray-700 hover:bg-gray-900 hover:text-white cursor-pointer'
-                    }`}
+                  }`}
                 >
                   {/* <Copy className="w-4 h-4" /> */}
                   {copied ? 'Copied!' : 'Copy'}
@@ -457,64 +454,68 @@ const TwitterSearchGenerator = () => {
             </div>
           )}
 
-          <div className='lg-col-span-2 mt-8 flex justify-between items-center'>
-            <div className='bg-white rounded-2xl shadow-xl p-6'>
-              <div className='flex items-center gap-3'>
+          <div className='mt-8'>
+            <div className='bg-white rounded-xl border border-gray-200 p-6'>
+              <div className='flex items-center justify-between'>
                 <h3 className='text-lg font-semibold text-gray-900'>Search History</h3>
                 <button
                   onClick={() => setShowHistory(!showHistory)}
-                  className='text-blue-600 hover:text-blue-400 font-medium transition-colors'
-
+                  className='text-blue-600 hover:text-blue-500 font-medium transition-colors flex items-center gap-1'
                 >
-                  {showHistory ? '▲' : '▼'}
+                  {showHistory ? 'Hide History' : 'Show History'} {showHistory ? '▲' : '▼'}
                 </button>
               </div>
               {showHistory && (
-                <div className='mt-4 space-y-4 max-h-64 overflow-y-auto'>
-                  {searchHistory.length === 0 && (
-                    <p className='text-sm text-gray-600'>No search history yet.</p>
-                  )}
-                  {searchHistory.map((item: any) => (
-                    <div key={item.id} className='border p-3 rounded-lg hover:bg-gray-50 transition-colors'>
-                      <div className='flex justify-between items-start'>
-                        <div>
-                          <p className='text-sm text-gray-800 break-all'>{item.url}</p>
-                          <p className='text-xs text-gray-500 mt-1'>
-                            {item.username} • {format(new Date(item.fromDate), 'PPP')} to {format(new Date(item.untilDate), 'PPP')}
-                          </p>
-                        </div>
-                        <div className='flex flex-col items-end gap-2'>
-                          <button
-
-                            onClick={() => loadFromHistory(item)}
-                            className='text-blue-600 hover:text-blue-400 text-sm font-medium transition-colors'
-                          >
-                            Load
-                          </button>
-                          <button
-                            onClick={() => deleteHistoryItem(item.id)}
-                            className='text-red-600 hover:text-red-400 text-sm font-medium transition-colors'
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
+                <div className='mt-4'>
+                  {searchHistory.length === 0 ? (
+                    <div className='text-center py-6 bg-gray-50 rounded-lg'>
+                      <p className='text-sm text-gray-600'>No search history yet.</p>
                     </div>
-                  ))}
-                  {searchHistory.length > 0 && (
-                    <button
-                      onClick={clearHistory}
-                      className='mt-2 text-red-600 hover:text-red-400 text-sm font-medium transition-colors'
-                    >
-                      Clear History
-                    </button>
+                  ) : (
+                    <>
+                      <div className='space-y-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent'>
+                        {searchHistory.map((item: any) => (
+                          <div key={item.id} className='bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors'>
+                            <div className='flex flex-col gap-2'>
+                              <div className='flex items-center justify-between'>
+                                <span className='font-medium text-gray-900'>@{item.username}</span>
+                                <span className='text-xs text-gray-500'>
+                                  {format(new Date(item.fromDate), 'MMM d, yyyy')} - {format(new Date(item.untilDate), 'MMM d, yyyy')}
+                                </span>
+                              </div>
+                              <p className='text-sm text-gray-600 break-all line-clamp-2'>{item.url}</p>
+                              <div className='flex justify-end gap-3 mt-1'>
+                                <button
+                                  onClick={() => loadFromHistory(item)}
+                                  className='px-3 py-1 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-md transition-colors font-medium'
+                                >
+                                  Load
+                                </button>
+                                <button
+                                  onClick={() => deleteHistoryItem(item.id)}
+                                  className='px-3 py-1 text-sm bg-red-50 text-red-600 hover:bg-red-100 rounded-md transition-colors font-medium'
+                                  >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className='mt-4 text-center'>
+                        <button
+                          onClick={clearHistory}
+                          className='px-4 py-2 text-sm bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors font-medium'
+                        >
+                          Clear All History
+                        </button>
+                      </div>
+                    </>
                   )}
                 </div>
               )}
-
-
             </div>
-            </div>
+          </div>
 
           {/* Info Box */}
           <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -527,6 +528,7 @@ const TwitterSearchGenerator = () => {
             </ul>
           </div>
 
+                          </div>
         {/* Footer */}
         <div className="text-center mt-8 text-gray-600">
           <p className="text-sm">
