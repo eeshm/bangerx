@@ -18,9 +18,8 @@ const TwitterSearchGenerator = () => {
   const [showPriview, setShowPreview] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [excludeReplies, setExcludeReplies] = useState(true);
-  const [includeMedia, setIncludeMedia] = useState(true)
+  const [includeMedia, setIncludeMedia] = useState(false)
 
-    ;
   const [excludeRetweets, setExcludeRetweets] = useState(false);
   const [minReplies, setMinReplies] = useState<number | undefined>(undefined);
   const [minLikes, setMinLikes] = useState<number | undefined>(undefined);
@@ -43,7 +42,7 @@ const TwitterSearchGenerator = () => {
         console.error('Failed to parse search history from localStorage', e);
       }
     }
-  })
+  }, [])
 
   useEffect(() => {
     if (username && fromDate && untilDate && validateInputs()) {
@@ -126,6 +125,8 @@ const TwitterSearchGenerator = () => {
     const url = `https://x.com/search?q=${encodedQuery}&src=typed_query&f=top`;
 
     setGeneratedUrl(url);
+    // saveToHistory();
+
   };
 
 
@@ -176,8 +177,6 @@ const TwitterSearchGenerator = () => {
     setSearchHistory(newHistory);
     localStorage.setItem('twitterSearchHistory', JSON.stringify(newHistory));
   }
-
-
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
     if (errors.username) {
@@ -198,6 +197,7 @@ const TwitterSearchGenerator = () => {
   };
 
   const openInNewTab = () => {
+    saveToHistory()
     window.open(generatedUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -338,7 +338,7 @@ const TwitterSearchGenerator = () => {
               className='flex item-center gap-2 text-blue-600 hover:text-blue-400 font-medium transition-colors'>
               Advanced Options
               {showAdvanced ? '▲' : '▼'}
-            </button>              
+            </button>
             {showAdvanced && (
               <div className='mt-4 p-4 bg-gray-100 rounded-lg space-y-4'>
                 {/* Filter options */}
@@ -347,51 +347,51 @@ const TwitterSearchGenerator = () => {
                     <h4 className='font-semibold text-gray-700'>Filters</h4>
                     <label className='flex items-center'>
                       <input
-                      type='checkbox'
-                      checked={excludeReplies}
-                      onChange={(e) => setExcludeReplies(e.target.checked)}
-                      className='w-4 h-4 text-blue-300 gap-2'/>
+                        type='checkbox'
+                        checked={excludeReplies}
+                        onChange={(e) => setExcludeReplies(e.target.checked)}
+                        className='w-4 h-4 text-blue-300 gap-2' />
                       <span className='ml-2 text-sm text-gray-700'>Exclude Replies</span>
-                      </label>
+                    </label>
                     <label className='flex items-center'>
                       <input
-                      type='checkbox'
-                      checked={excludeRetweets}
-                      onChange={(e) => setExcludeRetweets(e.target.checked)}
-                      className='w-4 h-4 text-blue-300 gap-2'/>
-                      <span className='ml-2 text-sm text-gray-700'>Exclude Replies</span>
-                      </label>
+                        type='checkbox'
+                        checked={excludeRetweets}
+                        onChange={(e) => setExcludeRetweets(e.target.checked)}
+                        className='w-4 h-4 text-blue-300 gap-2' />
+                      <span className='ml-2 text-sm text-gray-700'>Exclude Retweets</span>
+                    </label>
                     <label className='flex items-center'>
                       <input
-                      type='checkbox'
-                      checked={includeMedia}
-                      onChange={(e) => setIncludeMedia(e.target.checked)}
-                      className='w-4 h-4 text-blue-300 gap-2'/>
+                        type='checkbox'
+                        checked={includeMedia}
+                        onChange={(e) => setIncludeMedia(e.target.checked)}
+                        className='w-4 h-4 text-blue-300 gap-2' />
                       <span className='ml-2 text-sm text-gray-700'>Include Media Only</span>
-                      </label>
+                    </label>
                   </div>
                   <div>
                     <label className='font-semibold text-gray-700'>Minimums</label>
-                    <input 
-                    type="number"
-                    min={0}
-                    value={minReplies || ''}
-                    onChange={(e) => setMinReplies(e.target.value ? parseInt(e.target.value) : undefined)}
-                    placeholder='Min Replies'
-                    className={`w-full mt-2 px-3 py-2 border rounded-md ${errors.minReplies ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
+                    <input
+                      type="number"
+                      min={0}
+                      value={minReplies || ''}
+                      onChange={(e) => setMinReplies(e.target.value ? parseInt(e.target.value) : undefined)}
+                      placeholder='Min Replies'
+                      className={`w-full mt-2 px-3 py-2 border rounded-md ${errors.minReplies ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
                     />
                     {errors.minReplies && (
                       <p className="mt-1 text-sm text-red-600 flex items-center">
                         {errors.minReplies}
                       </p>
                     )}
-                    <input 
-                    type="number"
-                    min={0}
-                    value={minLikes || ''}
-                    onChange={(e)=>setMinLikes(e.target.value ? parseInt(e.target.value) : undefined)}
-                    placeholder='Min Likes'
-                    className={`w-full mt-2 px-3 py-2 border rounded-md ${errors.minLikes ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
+                    <input
+                      type="number"
+                      min={0}
+                      value={minLikes || ''}
+                      onChange={(e) => setMinLikes(e.target.value ? parseInt(e.target.value) : undefined)}
+                      placeholder='Min Likes'
+                      className={`w-full mt-2 px-3 py-2 border rounded-md ${errors.minLikes ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
                     />
                     {errors.minLikes && (
                       <p className="mt-1 text-sm text-red-600 flex items-center">
@@ -399,142 +399,142 @@ const TwitterSearchGenerator = () => {
                       </p>
                     )}
                     <input
-                    type="number"
-                    min={0}
-                    value={minRetweets || ''}
-                    onChange={(e)=>setMinRetweets(e.target.value ? parseInt(e.target.value) : undefined)}
-                    placeholder='Min Retweets'
-                    className={`w-full mt-2 px-3 py-2 border rounded-md ${errors.minRetweets ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
+                      type="number"
+                      min={0}
+                      value={minRetweets || ''}
+                      onChange={(e) => setMinRetweets(e.target.value ? parseInt(e.target.value) : undefined)}
+                      placeholder='Min Retweets'
+                      className={`w-full mt-2 px-3 py-2 border rounded-md ${errors.minRetweets ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
                     />
                     {errors.minRetweets && (
                       <p className="mt-1 text-sm text-red-600 flex items-center">
                         {errors.minRetweets}
                       </p>
                     )}
-                    </div>
+                  </div>
                 </div>
               </div>
             )}
           </div>
-          </div>         
-          {/* Generated URL Section */}
-          {generatedUrl && (
-            <div className="mt-8 p-6 bg-gray-50 rounded-xl border-2 border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
-                {/* <Search className="w-5 h-5 mr-2" /> */}
-                Generated Search URL
-              </h3>
+        </div>
+        {/* Generated URL Section */}
+        {generatedUrl && (
+          <div className="mt-8 p-6 bg-gray-50 rounded-xl border-2 border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+              {/* <Search className="w-5 h-5 mr-2" /> */}
+              Generated Search URL
+            </h3>
 
-              <div className="bg-white p-4 rounded-lg border mb-4">
-                <code className="text-sm text-gray-800 break-all">
-                  {generatedUrl}
-                </code>
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={openInNewTab}
-                  className="flex-1 bg-black hover:bg-gray-900 hover:scale-[0.98] text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  {/* <ExternalLink className="w-4 h-4" /> */}
-                  Open in X
-                </button>
-
-                <button
-                  onClick={copyToClipboard}
-                  className={`px-4 py-3  text-white text-center hover:scale-[0.98] rounded-lg w-[calc(100%-80%)] border-2 font-medium transition-colors flex items-center justify-center gap-2 ${copied
-                    ? 'bg-green-400 border-green-200 text-green-700'
-                    : 'bg-black border-gray-300 text-gray-700 hover:bg-gray-900 hover:text-white cursor-pointer'
-                  }`}
-                >
-                  {/* <Copy className="w-4 h-4" /> */}
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
-              </div>
+            <div className="bg-white p-4 rounded-lg border mb-4">
+              <code className="text-sm text-gray-800 break-all">
+                {generatedUrl}
+              </code>
             </div>
-          )}
 
-          <div className='mt-8'>
-            <div className='bg-white rounded-xl border border-gray-200 p-6'>
-              <div className='flex items-center justify-between'>
-                <h3 className='text-lg font-semibold text-gray-900'>Search History</h3>
-                <button
-                  onClick={() => setShowHistory(!showHistory)}
-                  className='text-blue-600 hover:text-blue-500 font-medium transition-colors flex items-center gap-1'
-                >
-                  {showHistory ? 'Hide History' : 'Show History'} {showHistory ? '▲' : '▼'}
-                </button>
-              </div>
-              {showHistory && (
-                <div className='mt-4'>
-                  {searchHistory.length === 0 ? (
-                    <div className='text-center py-6 bg-gray-50 rounded-lg'>
-                      <p className='text-sm text-gray-600'>No search history yet.</p>
-                    </div>
-                  ) : (
-                    <>
-                      <div className='space-y-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent'>
-                        {searchHistory.map((item: any) => (
-                          <div key={item.id} className='bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors'>
-                            <div className='flex flex-col gap-2'>
-                              <div className='flex items-center justify-between'>
-                                <span className='font-medium text-gray-900'>@{item.username}</span>
-                                <span className='text-xs text-gray-500'>
-                                  {format(new Date(item.fromDate), 'MMM d, yyyy')} - {format(new Date(item.untilDate), 'MMM d, yyyy')}
-                                </span>
-                              </div>
-                              <p className='text-sm text-gray-600 break-all line-clamp-2'>{item.url}</p>
-                              <div className='flex justify-end gap-3 mt-1'>
-                                <button
-                                  onClick={() => loadFromHistory(item)}
-                                  className='px-3 py-1 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-md transition-colors font-medium'
-                                >
-                                  Load
-                                </button>
-                                <button
-                                  onClick={() => deleteHistoryItem(item.id)}
-                                  className='px-3 py-1 text-sm bg-red-50 text-red-600 hover:bg-red-100 rounded-md transition-colors font-medium'
-                                  >
-                                  Delete
-                                </button>
-                              </div>
+            <div className="flex gap-3">
+              <button
+                onClick={openInNewTab}
+                className="flex-1 bg-black hover:bg-gray-900 hover:scale-[0.98] text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {/* <ExternalLink className="w-4 h-4" /> */}
+                Open in X
+              </button>
+
+              <button
+                onClick={copyToClipboard}
+                className={`px-4 py-3  text-white text-center hover:scale-[0.98] rounded-lg w-[calc(100%-80%)] border-2 font-medium transition-colors flex items-center justify-center gap-2 ${copied
+                  ? 'bg-green-400 border-green-200 text-green-700'
+                  : 'bg-black border-gray-300 text-gray-700 hover:bg-gray-900 hover:text-white cursor-pointer'
+                  }`}
+              >
+                {/* <Copy className="w-4 h-4" /> */}
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className='mt-8'>
+          <div className='bg-white rounded-xl border border-gray-200 p-6'>
+            <div className='flex items-center justify-between'>
+              <h3 className='text-lg font-semibold text-gray-900'>Search History</h3>
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className='text-blue-600 hover:text-blue-500 font-medium transition-colors flex items-center gap-1'
+              >
+                {showHistory ? 'Hide History' : 'Show History'} {showHistory ? '▲' : '▼'}
+              </button>
+            </div>
+            {showHistory && (
+              <div className='mt-4'>
+                {searchHistory.length === 0 ? (
+                  <div className='text-center py-6 bg-gray-50 rounded-lg'>
+                    <p className='text-sm text-gray-600'>No search history yet.</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className='space-y-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent'>
+                      {searchHistory.map((item: any) => (
+                        <div key={item.id} className='bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors'>
+                          <div className='flex flex-col gap-2'>
+                            <div className='flex items-center justify-between'>
+                              <span className='font-medium text-gray-900'>@{item.username}</span>
+                              <span className='text-xs text-gray-500'>
+                                {format(new Date(item.fromDate), 'MMM d, yyyy')} - {format(new Date(item.untilDate), 'MMM d, yyyy')}
+                              </span>
+                            </div>
+                            <p className='text-sm text-gray-600 break-all line-clamp-2'>{item.url}</p>
+                            <div className='flex justify-end gap-3 mt-1'>
+                              <button
+                                onClick={() => loadFromHistory(item)}
+                                className='px-3 py-1 text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-md transition-colors font-medium'
+                              >
+                                Load
+                              </button>
+                              <button
+                                onClick={() => deleteHistoryItem(item.id)}
+                                className='px-3 py-1 text-sm bg-red-50 text-red-600 hover:bg-red-100 rounded-md transition-colors font-medium'
+                              >
+                                Delete
+                              </button>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                      <div className='mt-4 text-center'>
-                        <button
-                          onClick={clearHistory}
-                          className='px-4 py-2 text-sm bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors font-medium'
-                        >
-                          Clear All History
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className='mt-4 text-center'>
+                      <button
+                        onClick={clearHistory}
+                        className='px-4 py-2 text-sm bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors font-medium'
+                      >
+                        Clear All History
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
-
-          {/* Info Box */}
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h4 className="font-semibold text-blue-900 mb-2">How it works:</h4>
-            <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Searches exclude replies by default`` for cleaner results</li>
-              <li>• Results are sorted by "Top" to show most relevant tweets first</li>
-              <li>• X's search typically goes back ~7 days for free accounts</li>
-              <li>• Premium X accounts may access extended historical data</li>
-            </ul>
-          </div>
-
-                          </div>
-        {/* Footer */}
-        <div className="text-center mt-8 text-gray-600">
-          <p className="text-sm">
-            Built with Next.js • Generate search URLs without API keys or authentication
-          </p>
         </div>
+
+        {/* Info Box */}
+        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <h4 className="font-semibold text-blue-900 mb-2">How it works:</h4>
+          <ul className="text-sm text-blue-800 space-y-1">
+            <li>• Searches exclude replies by default`` for cleaner results</li>
+            <li>• Results are sorted by "Top" to show most relevant tweets first</li>
+            <li>• X's search typically goes back ~7 days for free accounts</li>
+            <li>• Premium X accounts may access extended historical data</li>
+          </ul>
+        </div>
+
+      </div>
+      {/* Footer */}
+      <div className="text-center mt-8 text-gray-600">
+        <p className="text-sm">
+          Built with Next.js • Generate search URLs without API keys or authentication
+        </p>
+      </div>
     </div>
   );
 };
