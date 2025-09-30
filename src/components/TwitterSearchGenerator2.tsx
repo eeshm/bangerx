@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Twitter, Copy, ExternalLink, User, Hash, AlertCircle, TrendingUp, History, ChevronDown, ChevronUp, Trash2, Clock, Info, ArrowLeft, Sparkles, Zap, Flame } from 'lucide-react';
 import { PlaceholdersAndVanishInput } from './ui/placeholders-and-vanish-input';
+import { cn } from '@/lib/utils';
 
 const TwitterSearchGenerator = () => {
   const [currentStep, setCurrentStep] = useState('selection');
   const [searchMode, setSearchMode] = useState('');
-  const [username, setUsername] = useState<any>('');
+  const [username, setUsername] = useState('');
   const [keyword, setKeyword] = useState('');
   const [topicKeywords, setTopicKeywords] = useState('');
   const [minLikes, setMinLikes] = useState(100);
@@ -19,12 +20,12 @@ const TwitterSearchGenerator = () => {
   const [searchSummary, setSummary] = useState('');
   const [queryPreview, setQueryPreview] = useState('');
   const [copied, setCopied] = useState(false);
-  const [showHistory, setShowHistory] = useState<any>(false);
-  const [searchHistory, setSearchHistory] = useState<any>([]);
-  const [feedback, setFeedback] = useState<any>({});
-  const [validationErrors, setValidationErrors] = useState<any>({});
+  const [showHistory, setShowHistory] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<Array<any>>([]);
+  const [feedback, setFeedback] = useState<{ type?: string; message?: string }>({});
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
-  const popularTopics = ['AI tools', 'productivity', 'crypto', 'startup advice', 'fitness tips', 'SaaS', 'indie hacking'];
+  const popularTopics = ['AI tools', 'productivity', 'crypto', 'startup advice', 'moneyf', 'SaaS', 'indie hacking'];
   const popularCreators = ['elonmusk', 'naval', 'pmarca', 'levelsio', 'sama', 'dannypostmaa', 'swyx'];
 
   useEffect(() => {
@@ -40,8 +41,10 @@ const TwitterSearchGenerator = () => {
 
   useEffect(() => {
     if (currentStep === 'form') {
-      validateInputs();
-      if (isValidInput() && Object.keys(validationErrors).length === 0) {
+      const errors = validateFormInputs();
+      setValidationErrors(errors);
+
+      if (isValidInput() && Object.keys(errors).length === 0) {
         generateSearchUrl();
         generateSummary();
         generateQueryPreview();
@@ -52,9 +55,9 @@ const TwitterSearchGenerator = () => {
         setQueryPreview('');
       }
     }
-  }, [currentStep, searchMode, username, keyword, topicKeywords, minLikes, minRetweets, minReplies, excludeRetweets, mediaOnly, validationErrors]);
+  }, [currentStep, searchMode, username, keyword, topicKeywords, minLikes, minRetweets, minReplies, excludeRetweets, mediaOnly]);
 
-  const selectSearchMode = (mode:any) => {
+  const selectSearchMode = (mode: any) => {
     setSearchMode(mode);
     setCurrentStep('form');
     setUsername('');
@@ -63,9 +66,9 @@ const TwitterSearchGenerator = () => {
     setGeneratedUrl('');
     setSummary('');
     setQueryPreview('');
-    setFeedback('');
+    setFeedback({});
     setValidationErrors({});
-    
+
     // Set smart defaults based on mode
     if (mode === 'creator') {
       setMinLikes(500);
@@ -84,12 +87,12 @@ const TwitterSearchGenerator = () => {
     setGeneratedUrl('');
     setSummary('');
     setQueryPreview('');
-    setFeedback('');
+    setFeedback({});
     setValidationErrors({});
   };
 
-  const validateInputs = () => {
-    const errors:any = {};
+  const validateFormInputs = () => {
+    const errors: Record<string, string> = {};
 
     if (searchMode === 'creator' && username.trim()) {
       const cleanUsername = username.replace('@', '').trim();
@@ -111,7 +114,7 @@ const TwitterSearchGenerator = () => {
       errors.engagement = 'Retweets typically can\'t exceed likes - consider adjusting thresholds';
     }
 
-    setValidationErrors(errors);
+    return errors;
   };
 
   const isValidInput = () => {
@@ -124,7 +127,7 @@ const TwitterSearchGenerator = () => {
 
   const generateSearchUrl = () => {
     let query = '';
-    
+
     if (searchMode === 'creator') {
       const cleanUsername = username.replace('@', '').trim();
       query = `from:${cleanUsername}`;
@@ -134,22 +137,22 @@ const TwitterSearchGenerator = () => {
     } else {
       query = topicKeywords.trim();
     }
-    
+
     if (minLikes > 0) query += ` min_faves:${minLikes}`;
     if (minRetweets > 0) query += ` min_retweets:${minRetweets}`;
     if (minReplies > 0) query += ` min_replies:${minReplies}`;
     if (excludeRetweets) query += ' -filter:retweets';
     if (mediaOnly) query += ' filter:media';
-    
+
     const encodedQuery = encodeURIComponent(query);
     const url = `https://x.com/search?q=${encodedQuery}&src=typed_query&f=top`;
-    
+
     setGeneratedUrl(url);
   };
 
   const generateQueryPreview = () => {
     let query = '';
-    
+
     if (searchMode === 'creator') {
       const cleanUsername = username.replace('@', '').trim();
       query = `from:${cleanUsername}`;
@@ -159,19 +162,19 @@ const TwitterSearchGenerator = () => {
     } else {
       query = topicKeywords.trim();
     }
-    
+
     if (minLikes > 0) query += ` min_faves:${minLikes}`;
     if (minRetweets > 0) query += ` min_retweets:${minRetweets}`;
     if (minReplies > 0) query += ` min_replies:${minReplies}`;
     if (excludeRetweets) query += ' -filter:retweets';
     if (mediaOnly) query += ' filter:media';
-    
+
     setQueryPreview(query);
   };
 
   const generateSummary = () => {
     let summary = '';
-    
+
     if (searchMode === 'creator') {
       const cleanUsername = username.replace('@', '').trim();
       summary = `Find tweets from @${cleanUsername}`;
@@ -181,25 +184,25 @@ const TwitterSearchGenerator = () => {
     } else {
       summary = `Find viral tweets about "${topicKeywords.trim()}"`;
     }
-    
+
     const criteria = [];
     if (minLikes > 0) criteria.push(`${minLikes}+ likes`);
     if (minRetweets > 0) criteria.push(`${minRetweets}+ retweets`);
     if (minReplies > 0) criteria.push(`${minReplies}+ replies`);
-    
+
     if (criteria.length > 0) {
       summary += ` with ${criteria.join(', ')}`;
     }
-    
+
     if (mediaOnly) summary += ', media only';
     if (excludeRetweets) summary += ', no retweets';
-    
+
     setSummary(summary);
   };
 
   const generateFeedback = () => {
     const totalThreshold = minLikes + minRetweets + minReplies;
-    
+
     if (totalThreshold > 1000) {
       setFeedback({
         type: 'warning',
@@ -207,7 +210,7 @@ const TwitterSearchGenerator = () => {
       });
     } else if (totalThreshold > 500) {
       setFeedback({
-        type: 'info', 
+        type: 'info',
         message: 'Good thresholds for finding high-performing viral content'
       });
     } else if (totalThreshold < 50) {
@@ -216,12 +219,12 @@ const TwitterSearchGenerator = () => {
         message: 'Low thresholds might return many results. Consider using presets for more focused searches.'
       });
     } else {
-      setFeedback('');
+      setFeedback({});
     }
   };
 
-  const applyPreset  = (preset:any) => {
-    switch(preset) {
+  const applyPreset = (preset: any) => {
+    switch (preset) {
       case 'low':
         setMinLikes(100);
         setMinRetweets(10);
@@ -245,7 +248,7 @@ const TwitterSearchGenerator = () => {
     }
   };
 
-  const fillExample = (example:any, type:any) => {
+  const fillExample = (example: any, type: any) => {
     if (type === 'topic') {
       setTopicKeywords(example);
     } else if (type === 'creator') {
@@ -267,12 +270,12 @@ const TwitterSearchGenerator = () => {
       filters: { minLikes, minRetweets, minReplies, excludeRetweets, mediaOnly }
     };
 
-    const newHistory :any  = [searchItem, ...searchHistory.slice(0, 9)];
+    const newHistory: any = [searchItem, ...searchHistory.slice(0, 9)];
     setSearchHistory(newHistory);
     localStorage.setItem('bangerSearchHistory', JSON.stringify(newHistory));
   };
 
-  const loadFromHistory = (item:any) => {
+  const loadFromHistory = (item: any) => {
     setSearchMode(item.mode);
     setCurrentStep('form');
     if (item.mode === 'creator') {
@@ -294,7 +297,7 @@ const TwitterSearchGenerator = () => {
     localStorage.removeItem('bangerSearchHistory');
   };
 
-  const deleteHistoryItem = (id:any) => {
+  const deleteHistoryItem = (id: any) => {
     //@ts-ignore
     const newHistory = searchHistory.filter(item => item.id !== id);
     setSearchHistory(newHistory);
@@ -316,7 +319,7 @@ const TwitterSearchGenerator = () => {
     window.open(generatedUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const formatHistoryItem = (item:any) => {
+  const formatHistoryItem = (item: any) => {
     const date = new Date(item.timestamp).toLocaleDateString();
     const filters = [];
     if (item.filters.minLikes > 0) filters.push(`${item.filters.minLikes}+ likes`);
@@ -326,7 +329,7 @@ const TwitterSearchGenerator = () => {
     if (item.filters.excludeRetweets) filters.push('no RT');
 
     return {
-      title: item.mode === 'creator' 
+      title: item.mode === 'creator'
         ? `@${item.username}${item.keyword ? ` • ${item.keyword}` : ''}`
         : item.keyword,
       subtitle: filters.length > 0 ? filters.join(', ') : 'Default filters',
@@ -335,327 +338,279 @@ const TwitterSearchGenerator = () => {
     };
   };
 
+  const presets = [
+    { id: 'low', label: 'Low Viral' },
+    { id: 'medium', label: 'High Viral' },
+    { id: 'mega', label: 'Mega Viral' },
+  ];
   return (
-    <div className="min-h-screen bg-theme-lg py-12 px-4 font-mono">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-blue-600 rounded-full">
-              <TrendingUp className="w-8 h-8 text-white" />
+    <div className="min-h-screen py-12 px-5 font-mono">
+      <div className="selection:bg-black selection:text-white flex flex-col min-h-[calc(100vh-6rem)] justify-between">
+        <div className="flex-1 overflow-y-auto">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <h1 className="text-4xl font-bold text-gray-900">
+                X Banger's
+              </h1>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">
-              X Banger's
-            </h1>
+            <p className="text-sm text-gray-600 max-w-lg mx-auto">
+              Generate powerful search URLs to find viral content on X. No API needed - leverages X's native search with smart filters.
+            </p>
           </div>
-          <p className="text-lg text-gray-600 max-w-lg mx-auto">
-            Generate powerful search URLs to find viral content on X. No API needed - leverages X's native search with smart filters.
-          </p>
-        </div>
+          <div className="">
+            {currentStep === 'selection' ? (
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  What type of bangers are you hunting?
+                </h2>
+                <div className="flex gap-6 max-w-lg mx-auto">
+                  <button
+                    onClick={() => selectSearchMode('topic')}
+                    className="group p-8  border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-left"
+                  >
+                    <div className="flex items-center gap-4 mb-4">
+                      <h3 className="text-xl font-bold text-gray-900">Find by Keyword/Topic</h3>
+                    </div>
+                  </button>
 
-        <div className="">
-          {currentStep === 'selection' ? (
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                What type of bangers are you hunting?
-              </h2>
-              <div className="flex gap-6 max-w-lg mx-auto">
-                <button
-                  onClick={() => selectSearchMode('topic')}
-                  className="group p-8  border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-left"
-                >
-                  <div className="flex items-center gap-4 mb-4">
-                    <h3 className="text-xl font-bold text-gray-900 bg-theme-fg">Find by Keyword/Topic</h3>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => selectSearchMode('creator')}
-                  className="group p-8 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-left"
-                >
-                  <div className="flex items-center gap-4 mb-4">
-                    <h3 className="text-xl font-bold text-gray-900">Find from Username</h3>
-                  </div>
-                  {/* <p className="text-gray-600 leading-relaxed">
+                  <button
+                    onClick={() => selectSearchMode('creator')}
+                    className="group p-8 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-left"
+                  >
+                    <div className="flex items-center gap-4 mb-4">
+                      <h3 className="text-xl font-bold text-gray-900">Find from Username</h3>
+                    </div>
+                    {/* <p className="text-gray-600 leading-relaxed">
                     Discover the most viral content from specific creators. Analyze what makes their tweets go viral and find their best-performing posts.
                   </p>
                   <div className="mt-4 text-sm text-blue-600 font-medium">
                     Example: @elonmusk, @naval, @pmarca →
                   </div> */}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <button
+                  onClick={goBackToSelection}
+                  className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to search options
                 </button>
-              </div>
 
-              {searchHistory.length > 0 && (
-                <div className="mt-8 pt-8 border-t">
-                  <p className="text-sm text-gray-600 mb-4">Or continue from recent searches:</p>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {searchHistory.slice(0, 3).map((item:any
-
-
-                    ) => {
-                      const formatted = formatHistoryItem(item);
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => loadFromHistory(item)}
-                          className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-700 transition-colors flex items-center gap-2"
-                        >
-                          {item.mode === 'topic' ? <Hash className="w-3 h-3" /> : <User className="w-3 h-3" />}
-                          {formatted.title}
-                        </button>
-                      );
-                    })}
+                <div className="text-center mb-8">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    {/* {searchMode === 'topic' ? (
+                      <Hash className="w-6 h-6 text-purple-600" />
+                    ) : (
+                      <User className="w-6 h-6 text-blue-600" />
+                    )} */}
+                    <h2 className="text-2xl font-bold text-gray-900 underline underline-offset-5 decoration-[#f54e00] decoration-wavy">
+                      {searchMode === 'topic' ? 'Find by Keyword/Topic' : 'Find from Username'}
+                    </h2>
                   </div>
+                  <p className="text-gray-600">
+                    {searchMode === 'topic'
+                      ? 'Search for viral tweets about any subject or trend'
+                      : 'Discover viral content from specific creators'
+                    }
+                  </p>
                 </div>
-              )}
-            </div>
-          ) : (
-            <div>
-              <button
-                onClick={goBackToSelection}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to search options
-              </button>
 
-              <div className="text-center mb-8">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  {searchMode === 'topic' ? (
-                    <Hash className="w-6 h-6 text-purple-600" />
+                <div className="space-y-6 mb-8">
+                  {searchMode === 'creator' ? (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Creator Username
+                        </label>
+                        <PlaceholdersAndVanishInput
+                          value={username}
+                          setValue={setUsername}
+                          onChange={(e) => setUsername(e.target.value)}
+                          placeholders={popularCreators}
+                        />
+                        {validationErrors.username && (
+                          <p className="mt-1 text-sm text-red-600 flex items-center">
+                            <AlertCircle className="w-4 h-4 mr-1" />
+                            {validationErrors.username}
+                          </p>
+                        )}
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <span className="text-xs text-gray-500">Popular:</span>
+                          {popularCreators.map(creator => (
+                            <button
+                              key={creator}
+                              onClick={() => fillExample(creator, 'creator')}
+                              className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 cursor-pointer rounded transition-colors"
+                            >
+                              @{creator}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          + Keyword Filter <span className="text-gray-500 font-normal">(optional)</span>
+                        </label>
+                        <PlaceholdersAndVanishInput
+                          value={keyword}
+                          setValue={setKeyword}
+                          onChange={(e) => setKeyword(e.target.value)}
+                          placeholders={["AI, startups, productivity..."]}
+                        />
+                      </div>
+                    </div>
                   ) : (
-                    <User className="w-6 h-6 text-blue-600" />
-                  )}
-                  <h2 className="text-xl font-bold text-gray-900">
-                    {searchMode === 'topic' ? 'Find by Keyword/Topic' : 'Find from Username'}
-                  </h2>
-                </div>
-                <p className="text-gray-600">
-                  {searchMode === 'topic' 
-                    ? 'Search for viral tweets about any subject or trend'
-                    : 'Discover viral content from specific creators'
-                  }
-                </p>
-              </div>
-
-              <div className="space-y-6 mb-8">
-                {searchMode === 'creator' ? (
-                  <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Creator Username
+                        Topic or Keywords
                       </label>
                       <PlaceholdersAndVanishInput
-                        // type="text"
-                        // value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholders={popularCreators}
-                        // className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        //   validationErrors.username ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        // }`}
-                        // autoFocus
+                        value={topicKeywords}
+                        setValue={setTopicKeywords}
+                        onChange={(e) => setTopicKeywords(e.target.value)}
+                        placeholders={popularTopics}
                       />
-                      {validationErrors.username && (
+                      {validationErrors.topic && (
                         <p className="mt-1 text-sm text-red-600 flex items-center">
                           <AlertCircle className="w-4 h-4 mr-1" />
-                          {validationErrors.username}
+                          {validationErrors.topic}
                         </p>
                       )}
+                      <p className="text-xs text-shadow-2xs shadow-amber-200 text-gray-500 mt-1">
+                        Use quotes for exact phrases, OR for alternatives
+                      </p>
                       <div className="mt-2 flex flex-wrap gap-2">
-                        <span className="text-xs text-gray-500">Popular:</span>
-                        {popularCreators.map(creator => (
+                        <span className="text-xs relative top-1 text-gray-500">Popular:</span>
+                        {popularTopics.map(topic => (
                           <button
-                            key={creator}
-                            onClick={() => fillExample(creator, 'creator')}
-                            className="text-xs px-2 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded transition-colors"
+                            key={topic}
+                            onClick={() => fillExample(topic, 'topic')}
+                            className={cn("text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 text-black rounded",
+                              " transition-colors cursor-pointer"
+                            )}
                           >
-                            @{creator}
+                            {topic}
                           </button>
                         ))}
                       </div>
                     </div>
+                  )}
+                </div>
+
+                <div className="bg-gray-50 rounded-lg p-4 mb-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-semibold text-gray-900">Engagement Thresholds</h3>
+                      <div className="flex gap-2">
+                        {presets.map(({ id, label }) => (
+                          <button
+                            key={id}
+                            onClick={() => applyPreset(id)}
+                            className={cn("px-3 py-1 text-[9px] rounded-sm flex items-center gap-1",
+                              "transition-all hover:bg-gray-200",
+                              "cursor-pointer"
+                            )}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                  </div>
+
+                  <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        + Keyword Filter <span className="text-gray-500 font-normal">(optional)</span>
-                      </label>
+                      <div className="flex justify-between text-sm text-gray-700 mb-2">
+                        <span>Min Likes</span>
+                        <span className="font-medium">{minLikes}</span>
+                      </div>
                       <input
-                        type="text"
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                        placeholder="AI, startups, productivity..."
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        type="range"
+                        value={minLikes}
+                        onChange={(e) => setMinLikes(parseInt(e.target.value))}
+                        min="0"
+                        max="10000"
+                        step="50"
+                        className={cn("w-full bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-gray-200 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[14px] [&::-webkit-slider-thumb]:w-[15px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border",
+                          "accent-[#f54e00]"
+                        )}
+                      />
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm text-gray-700 mb-2">
+                        <span>Min Retweets</span>
+                        <span className="font-medium">{minRetweets}</span>
+                      </div>
+                      <input
+                        type="range"
+                        value={minRetweets}
+                        onChange={(e) => setMinRetweets(parseInt(e.target.value))}
+                        min="0"
+                        max="1000"
+                        step="10"
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-sm text-gray-700 mb-2">
+                        <span>Min Replies</span>
+                        <span className="font-medium">{minReplies}</span>
+                      </div>
+                      <input
+                        type="range"
+                        value={minReplies}
+                        onChange={(e) => setMinReplies(parseInt(e.target.value))}
+                        min="0"
+                        max="500"
+                        step="5"
+                        className="w-full"
                       />
                     </div>
                   </div>
-                ) : (
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Topic or Keywords
-                    </label>
-                    <input
-                      type="text"
-                      value={topicKeywords}
-                      onChange={(e) => setTopicKeywords(e.target.value)}
-                      placeholder='"AI tools" OR productivity OR "life hacks"'
-                      className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                        validationErrors.topic ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                      }`}
-                      autoFocus
-                    />
-                    {validationErrors.topic && (
-                      <p className="mt-1 text-sm text-red-600 flex items-center">
-                        <AlertCircle className="w-4 h-4 mr-1" />
-                        {validationErrors.topic}
-                      </p>
-                    )}
-                    <p className="text-xs text-gray-500 mt-1">
-                      Use quotes for exact phrases, OR for alternatives
+
+                  {validationErrors.engagement && (
+                    <p className="mt-3 text-sm text-amber-600 flex items-center">
+                      <AlertCircle className="w-4 h-4 mr-1" />
+                      {validationErrors.engagement}
                     </p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      <span className="text-xs text-gray-500">Popular:</span>
-                      {popularTopics.map(topic => (
-                        <button
-                          key={topic}
-                          onClick={() => fillExample(topic, 'topic')}
-                          className="text-xs px-2 py-1 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded transition-colors"
-                        >
-                          {topic}
-                        </button>
-                      ))}
-                    </div>
+                  )}
+
+                  <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t">
+                    <label className="flex cursor-pointer  hover:underline transition items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={mediaOnly}
+                        onChange={(e) => setMediaOnly(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 rounded cursor-pointer "
+                      />
+                      <span className="text-sm text-gray-700">Media only (images/videos)</span>
+                    </label>
+                    <label className="flex items-center transition hover:underline cursor-pointer gap-2">
+                      <input
+                        type="checkbox"
+                        checked={excludeRetweets}
+                        onChange={(e) => setExcludeRetweets(e.target.checked)}
+                        className="w-4 h-4 text-blue-600 rounded cursor-pointer "
+                      />
+                      <span className="text-sm text-gray-700">Exclude retweets</span>
+                    </label>
+                  </div>
+                </div>
+
+                {queryPreview && (
+                  <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
+                    <h4 className="font-semibold text-indigo-900 mb-2 flex items-center text-sm">
+                      <Search className="w-4 h-4 mr-2" />
+                      Your X Search Query
+                    </h4>
+                    <code className="text-xs text-indigo-800 block bg-white p-2 rounded break-all">
+                      {queryPreview}
+                    </code>
                   </div>
                 )}
-              </div>
 
-              <div className="bg-gray-50 rounded-lg p-6 mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900">Engagement Thresholds</h3>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => applyPreset('low')}
-                      className="px-3 py-1 text-xs bg-green-100 hover:bg-green-200 text-green-700 rounded transition-colors flex items-center gap-1"
-                    >
-                      <Sparkles className="w-3 h-3" />
-                      Low Viral
-                    </button>
-                    <button
-                      onClick={() => applyPreset('medium')}
-                      className="px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 rounded transition-colors flex items-center gap-1"
-                    >
-                      <Zap className="w-3 h-3" />
-                      High Viral
-                    </button>
-                    <button
-                      onClick={() => applyPreset('mega')}
-                      className="px-3 py-1 text-xs bg-orange-100 hover:bg-orange-200 text-orange-700 rounded transition-colors flex items-center gap-1"
-                    >
-                      <Flame className="w-3 h-3" />
-                      Mega Viral
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-sm text-gray-700 mb-2">
-                      <span>💙 Min Likes</span>
-                      <span className="font-medium">{minLikes}</span>
-                    </div>
-                    <input
-                      type="range"
-                      value={minLikes}
-                      onChange={(e) => setMinLikes(parseInt(e.target.value))}
-                      min="0"
-                      max="10000"
-                      step="50"
-                      className="w-full"
-                    />
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm text-gray-700 mb-2">
-                      <span>🔄 Min Retweets</span>
-                      <span className="font-medium">{minRetweets}</span>
-                    </div>
-                    <input
-                      type="range"
-                      value={minRetweets}
-                      onChange={(e) => setMinRetweets(parseInt(e.target.value))}
-                      min="0"
-                      max="1000"
-                      step="10"
-                      className="w-full"
-                    />
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm text-gray-700 mb-2">
-                      <span>💬 Min Replies</span>
-                      <span className="font-medium">{minReplies}</span>
-                    </div>
-                    <input
-                      type="range"
-                      value={minReplies}
-                      onChange={(e) => setMinReplies(parseInt(e.target.value))}
-                      min="0"
-                      max="500"
-                      step="5"
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-
-                {validationErrors.engagement && (
-                  <p className="mt-3 text-sm text-amber-600 flex items-center">
-                    <AlertCircle className="w-4 h-4 mr-1" />
-                    {validationErrors.engagement}
-                  </p>
-                )}
-
-                <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={mediaOnly}
-                      onChange={(e) => setMediaOnly(e.target.checked)}
-                      className="w-4 h-4 text-blue-600 rounded"
-                    />
-                    <span className="text-sm text-gray-700">Media only (images/videos)</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={excludeRetweets}
-                      onChange={(e) => setExcludeRetweets(e.target.checked)}
-                      className="w-4 h-4 text-blue-600 rounded"
-                    />
-                    <span className="text-sm text-gray-700">Exclude retweets</span>
-                  </label>
-                </div>
-              </div>
-
-              {queryPreview && (
-                <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
-                  <h4 className="font-semibold text-indigo-900 mb-2 flex items-center text-sm">
-                    <Search className="w-4 h-4 mr-2" />
-                    Your X Search Query
-                  </h4>
-                  <code className="text-xs text-indigo-800 block bg-white p-2 rounded break-all">
-                    {queryPreview}
-                  </code>
-                </div>
-              )}
-
-              {searchSummary && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
-                    <Info className="w-4 h-4 mr-2" />
-                    Search Summary
-                  </h4>
-                  <p className="text-blue-800 text-sm leading-relaxed">
-                    {searchSummary}
-                  </p>
-                </div>
-              )}
-
-              {feedback && (
+                {/* {feedback && (
                 <div className={`border rounded-lg p-3 mb-6 flex items-center gap-2 text-sm ${
                   feedback.type === 'warning' ? 'bg-amber-50 border-amber-200 text-amber-800' :
                   feedback.type === 'info' ? 'bg-blue-50 border-blue-200 text-blue-800' :
@@ -665,74 +620,67 @@ const TwitterSearchGenerator = () => {
                   {feedback.message}
                 </div>
               )}
+               */}
+                {generatedUrl && (
+                  <div className=" rounded-lg">
+                    <h3 className="font-semibold text-h1 mb-4 flex items-center">
+                      Search URL Generated
+                    </h3>
 
-              <div className="text-center mb-6">
-                <button
-                  onClick={generateSearchUrl}
-                  disabled={!isValidInput() || Object.keys(validationErrors).length > 0}
-                  className={`px-8 py-4 rounded-lg font-semibold text-white transition-all flex items-center gap-2 mx-auto ${
-                    isValidInput() && Object.keys(validationErrors).length === 0
-                      ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' 
-                      : 'bg-gray-400 cursor-not-allowed'
-                  }`}
-                >
-                  <TrendingUp className="w-5 h-5" />
-                  Generate Banger Search
-                </button>
+                    <div className="bg-white p-3 rounded-lg border mb-4 overflow-x-auto">
+                      <code className="text-xs text-gray-700 break-all">
+                        {generatedUrl}
+                      </code>
+                    </div>
+
+                    <div className="flex gap-3 w-full">
+                      <button
+                        onClick={openInNewTab}
+                        className={cn("flex-1 bg-theme-fg text-white font-medium",
+                          "py-3 px-4 rounded-lg",
+                          "transition-colors flex items-center justify-center gap-2",
+                          "cursor-pointer hover:scale-[0.98]",
+                          "transition-all duration-150")}
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Open in X
+                      </button>
+
+                      <button
+                        onClick={copyToClipboard}
+                        className={cn(`flex justify-center rounded-lg border-2 gap-2 ${copied
+                            ? 'bg-green-300  border-green-50 text-white'
+                            : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`,
+                          "font-medium transition-colors flex items-center",
+                          "w-[calc(100%-80%)] text-center",
+                          "transition-all duration-150 hover:scale-[0.98] cursor-pointer"
+
+                        )}
+                      >
+                        <Copy className="w-4 h-4" />
+                        {copied ? 'Copied!' : 'Copy'}
+                      </button>
+                    </div>
+
+                    <div className="mt-4 p-3  rounded-lg">
+                      <p className="text-xs flex items-center gap-1">
+                        <span>Not enought results? Trying lowering the bar or use the "Low Viral" preset.
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-
-              {generatedUrl && (
-                <div className="border-2 border-green-200 bg-green-50 rounded-lg p-6">
-                  <h3 className="font-semibold text-green-900 mb-4 flex items-center">
-                    ✅ Search URL Generated
-                  </h3>
-
-                  <div className="bg-white p-3 rounded-lg border mb-4 overflow-x-auto">
-                    <code className="text-xs text-gray-700 break-all">
-                      {generatedUrl}
-                    </code>
-                  </div>
-                  
-                  <div className="flex gap-3">
-                    <button
-                      onClick={openInNewTab}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Open in X
-                    </button>
-                    
-                    <button
-                      onClick={copyToClipboard}
-                      className={`px-6 py-3 rounded-lg border-2 font-medium transition-colors flex items-center gap-2 ${
-                        copied 
-                          ? 'bg-green-100 border-green-300 text-green-700' 
-                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Copy className="w-4 h-4" />
-                      {copied ? 'Copied!' : 'Copy'}
-                    </button>
-                  </div>
-
-                  <div className="mt-4 p-3 bg-green-100 rounded-lg">
-                    <p className="text-xs text-green-800 flex items-center gap-1">
-                      <Info className="w-3 h-3" />
-                      <span>
-                        💡 <strong>Tip:</strong> If you see few results, try lowering your engagement thresholds or use the "Low Viral" preset.
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md">
+
+        <div className="rounded-lg shadow-md mt-5">
           <button
             onClick={() => setShowHistory(!showHistory)}
-            className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+            className="w-full px-6 py-4 flex  cursor-pointer items-center justify-between text-left hover:bg-gray-50 transition-colors text-"
           >
             <div className="flex items-center gap-2">
               <History className="w-5 h-5 text-gray-600" />
@@ -747,7 +695,7 @@ const TwitterSearchGenerator = () => {
             <div className="border-t px-6 pb-4">
               {searchHistory.length === 0 ? (
                 <p className="text-sm text-gray-500 text-center py-8">
-                  No searches yet. Your history will appear here after you generate searches.
+                  go search first !!!
                 </p>
               ) : (
                 <div className="space-y-3 mt-4">
@@ -755,24 +703,19 @@ const TwitterSearchGenerator = () => {
                     <span className="text-xs text-gray-500">Recent searches</span>
                     <button
                       onClick={clearHistory}
-                      className="text-xs text-red-600 hover:text-red-700 flex items-center gap-1"
+                      className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                       Clear All
                     </button>
                   </div>
-                  
-                  {searchHistory.slice(0, 5).map((item:any) => {
+
+                  {searchHistory.slice(0, 5).map((item: any) => {
                     const formatted = formatHistoryItem(item);
                     return (
                       <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg text-sm">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            {item.mode === 'topic' ? (
-                              <Hash className="w-3 h-3 text-purple-600" />
-                            ) : (
-                              <User className="w-3 h-3 text-blue-600" />
-                            )}
                             <p className="font-medium text-gray-900 truncate">
                               {formatted.title}
                             </p>
@@ -784,23 +727,21 @@ const TwitterSearchGenerator = () => {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => loadFromHistory(item)}
-                            className="text-blue-600 hover:text-blue-700 text-xs flex items-center gap-1 px-2 py-1"
+                            className="text-blue-600 hover:text-blue-700 text-xs cursor-pointer hover:underline flex items-center gap-1 px-2 py-1"
                           >
-                            <Clock className="w-3 h-3" />
                             Load
                           </button>
                           <button
                             onClick={() => window.open(item.url, '_blank')}
-                            className="text-gray-600 hover:text-gray-700 text-xs flex items-center gap-1 px-2 py-1"
+                            className="text-gray-600 hover:text-gray-700 text-xs cursor-pointer hover:underline flex items-center gap-1 px-2 py-1"
                           >
-                            <ExternalLink className="w-3 h-3" />
                             Open
                           </button>
                           <button
                             onClick={() => deleteHistoryItem(item.id)}
-                            className="text-red-500 hover:text-red-700"
+                            className="text-red-500 hover:text-red-700 text-xs cursor-pointer hover:underline"
                           >
-                            <Trash2 className="w-3 h-3" />
+                            Delete
                           </button>
                         </div>
                       </div>
