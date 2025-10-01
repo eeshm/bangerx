@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Twitter, Copy, ExternalLink, User, Hash, AlertCircle, TrendingUp, History, ChevronDown, ChevronUp, Trash2, Clock, Info, ArrowLeft, Sparkles, Zap, Flame } from 'lucide-react';
 import { PlaceholdersAndVanishInput } from './ui/placeholders-and-vanish-input';
 import { cn } from '@/lib/utils';
+import StyledSlider from './Slider';
 
 const TwitterSearchGenerator = () => {
   const [currentStep, setCurrentStep] = useState('selection');
@@ -393,7 +394,7 @@ const TwitterSearchGenerator = () => {
               <div>
                 <button
                   onClick={goBackToSelection}
-                  className="flex items-center cursor-pointer gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to search options
@@ -443,7 +444,7 @@ const TwitterSearchGenerator = () => {
                             <button
                               key={creator}
                               onClick={() => fillExample(creator, 'creator')}
-                              className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 cursor-pointer rounded transition-colors"
+                              className="text-xs px-2 py-1 bg-[var(--color-card-bg)] hover:bg-gray-200 cursor-pointer rounded transition-colors"
                             >
                               @{creator}
                             </button>
@@ -500,23 +501,23 @@ const TwitterSearchGenerator = () => {
                   )}
                 </div>
 
-                <div className="bg-gray-50 rounded-lg p-4 mb-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-gray-900">Engagement Thresholds</h3>
-                      <div className="flex gap-2">
-                        {presets.map(({ id, label }) => (
-                          <button
-                            key={id}
-                            onClick={() => applyPreset(id)}
-                            className={cn("px-3 py-1 text-[9px] rounded-sm flex items-center gap-1",
-                              "transition-all hover:bg-gray-200",
-                              "cursor-pointer"
-                            )}
-                          >
-                            {label}
-                          </button>
-                        ))}
-                      </div>
+                <div className="bg-[var(--color-card-bg)] rounded-lg p-4 mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold text-gray-900">Engagement Thresholds</h3>
+                    <div className="flex gap-2">
+                      {presets.map(({ id, label }) => (
+                        <button
+                          key={id}
+                          onClick={() => applyPreset(id)}
+                          className={cn("px-3 py-1 text-[9px] rounded-sm flex items-center gap-1",
+                            "transition-all",
+                            "hover:text-orange",
+                          )}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="space-y-4">
@@ -525,16 +526,12 @@ const TwitterSearchGenerator = () => {
                         <span>Min Likes</span>
                         <span className="font-medium">{minLikes}</span>
                       </div>
-                      <input
-                        type="range"
+                      <StyledSlider
                         value={minLikes}
-                        onChange={(e) => setMinLikes(parseInt(e.target.value))}
-                        min="0"
-                        max="10000"
-                        step="50"
-                        className={cn("w-full bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-gray-200 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[14px] [&::-webkit-slider-thumb]:w-[15px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border",
-                          "accent-[#f54e00]"
-                        )}
+                        onChange={(e: any) => setMinLikes(parseInt(e.target.value))}
+                        min={0}
+                        max={10000}
+                        step={50}
                       />
                     </div>
                     <div>
@@ -542,14 +539,12 @@ const TwitterSearchGenerator = () => {
                         <span>Min Retweets</span>
                         <span className="font-medium">{minRetweets}</span>
                       </div>
-                      <input
-                        type="range"
+                      <StyledSlider
                         value={minRetweets}
-                        onChange={(e) => setMinRetweets(parseInt(e.target.value))}
-                        min="0"
-                        max="1000"
-                        step="10"
-                        className="w-full"
+                        onChange={(e: any) => setMinRetweets(parseInt(e.target.value))}
+                        min={0}
+                        max={1000}
+                        step={10}
                       />
                     </div>
                     <div>
@@ -557,14 +552,12 @@ const TwitterSearchGenerator = () => {
                         <span>Min Replies</span>
                         <span className="font-medium">{minReplies}</span>
                       </div>
-                      <input
-                        type="range"
+                      <StyledSlider
                         value={minReplies}
                         onChange={(e) => setMinReplies(parseInt(e.target.value))}
-                        min="0"
-                        max="500"
-                        step="5"
-                        className="w-full"
+                        min={0}
+                        max={500}
+                        step={5}
                       />
                     </div>
                   </div>
@@ -582,7 +575,7 @@ const TwitterSearchGenerator = () => {
                         type="checkbox"
                         checked={mediaOnly}
                         onChange={(e) => setMediaOnly(e.target.checked)}
-                        className="w-4 h-4 text-blue-600 rounded cursor-pointer "
+                        className="w-4 h-4  rounded cursor-pointer "
                       />
                       <span className="text-sm text-gray-700">Media only (images/videos)</span>
                     </label>
@@ -599,12 +592,12 @@ const TwitterSearchGenerator = () => {
                 </div>
 
                 {queryPreview && (
-                  <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
-                    <h4 className="font-semibold text-indigo-900 mb-2 flex items-center text-sm">
-                      <Search className="w-4 h-4 mr-2" />
+                  <div className="bg-[var(--color-card-bg)] rounded-lg p-4 mb-6">
+                    <h4 className="font-semibold text-gray-700 mb-2 flex items-center text-sm">
+                      <Search className="w-4 h-4 mr-2 stroke-[var(--color-orange)]" />
                       Your X Search Query
                     </h4>
-                    <code className="text-xs text-indigo-800 block bg-white p-2 rounded break-all">
+                    <code className="text-xs text-gray-800 block bg-[var(--color-theme-bg)] p-2 rounded break-all">
                       {queryPreview}
                     </code>
                   </div>
@@ -627,7 +620,7 @@ const TwitterSearchGenerator = () => {
                       Search URL Generated
                     </h3>
 
-                    <div className="bg-white p-3 rounded-lg border mb-4 overflow-x-auto">
+                    <div className="bg-[var(--color-card-bg)] p-3 rounded-lg border mb-4 overflow-x-auto">
                       <code className="text-xs text-gray-700 break-all">
                         {generatedUrl}
                       </code>
@@ -639,7 +632,7 @@ const TwitterSearchGenerator = () => {
                         className={cn("flex-1 bg-theme-fg text-white font-medium",
                           "py-3 px-4 rounded-lg",
                           "transition-colors flex items-center justify-center gap-2",
-                          "cursor-pointer hover:scale-[0.98]",
+                          "hover:bg-gray-950",
                           "transition-all duration-150")}
                       >
                         <ExternalLink className="w-4 h-4" />
@@ -649,8 +642,8 @@ const TwitterSearchGenerator = () => {
                       <button
                         onClick={copyToClipboard}
                         className={cn(`flex justify-center rounded-lg border-2 gap-2 ${copied
-                            ? 'bg-green-300  border-green-50 text-white'
-                            : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          ? 'bg-[var(--color-orange)] text-white'
+                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
                           }`,
                           "font-medium transition-colors flex items-center",
                           "w-[calc(100%-80%)] text-center",
@@ -727,7 +720,7 @@ const TwitterSearchGenerator = () => {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => loadFromHistory(item)}
-                            className="text-blue-600 hover:text-blue-700 text-xs cursor-pointer hover:underline flex items-center gap-1 px-2 py-1"
+                            className="text-gray-600 hover:text-gray-700  text-xs cursor-pointer hover:underline flex items-center bg gap-1 px-2 py-1"
                           >
                             Load
                           </button>
@@ -739,7 +732,7 @@ const TwitterSearchGenerator = () => {
                           </button>
                           <button
                             onClick={() => deleteHistoryItem(item.id)}
-                            className="text-red-500 hover:text-red-700 text-xs cursor-pointer hover:underline"
+                            className="text-gray-600 hover:text-gray-700 text-xs cursor-pointer hover:underline"
                           >
                             Delete
                           </button>
