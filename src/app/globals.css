@@ -8,6 +8,12 @@
   --color-white1:#ffffff;
   --color-black:#000000;
   --color-theme-bg: #f7f7f4;
+  --color-theme-dark: #14120b;
+  --color-theme-dark-text: #edecec;
+  --color-theme-dark-subtext: #d7d6d5;
+  --color-theme-dark-card: #1b1913;
+
+
   --color-theme-fg: #26251e;
   --color-h1:#000000;
   --color-orange:#f54e00;
@@ -90,6 +96,8 @@
   --sidebar-accent-foreground:oklch(0.205 0 0);
   --sidebar-border:oklch(0.922 0 0);
   --sidebar-ring:oklch(0.708 0 0);
+  --slider-progress-color: #0a0a0a; /* Black for light mode progress */
+  --slider-track-color: #e5e5e5; 
 }
 
 .dark {
@@ -124,6 +132,8 @@
   --sidebar-accent-foreground:oklch(0.985 0 0);
   --sidebar-border:oklch(1 0 0 / 10%);
   --sidebar-ring:oklch(0.556 0 0);
+  --slider-progress-color: #d7d6d5;
+  --slider-track-color: #1b1913;    
 
 }
 

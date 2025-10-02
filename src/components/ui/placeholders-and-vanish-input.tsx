@@ -23,7 +23,7 @@ export function PlaceholdersAndVanishInput({
   const startAnimation = () => {
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
-    }, 1000);
+    }, 2000);
   };
   const handleVisibilityChange = () => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
@@ -180,7 +180,7 @@ export function PlaceholdersAndVanishInput({
   return (
     <form
       className={cn(
-        "w-full relative dark:bg-zinc-800 h-12 bg-white rounded-md overflow-hidden shadow-md border transition duration-200",
+        "w-full relative dark:bg-zinc-800 h-12 bg-white rounded-md overflow-hidden shadow-md dark:hover:shadow-theme-dark-card border transition duration-200",
         value && "bg-gray-50"
       )}
       onSubmit={handleSubmit}
@@ -204,7 +204,7 @@ export function PlaceholdersAndVanishInput({
         value={value}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4  pr-20",
+          "w-full relative text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4  pr-20",
           animating && "text-transparent dark:text-transparent"
         )}
       />

@@ -1,3 +1,5 @@
+// src/components/StyledSlider.tsx
+
 import React from 'react';
 import { cn } from '@/lib/utils'; // Assuming your cn utility is here
 
@@ -21,9 +23,10 @@ const StyledSlider: React.FC<StyledSliderProps> = ({
 }) => {
   const progress = ((value - min) / (max - min)) * 100;
 
-  // Define the dynamic style for the track's filled portion
+  // 1. Use CSS variables for the dynamic gradient.
+  //    This automatically picks up the dark/light theme colors from your CSS.
   const sliderStyle = {
-    background: `linear-gradient(to right, #0a0a0a ${progress}%, #e5e5e5 ${progress}%)`,
+    background: `linear-gradient(to right, var(--slider-progress-color) ${progress}%, var(--slider-track-color) ${progress}%)`,
   };
 
   return (
@@ -36,12 +39,18 @@ const StyledSlider: React.FC<StyledSliderProps> = ({
       step={step}
       style={sliderStyle}
       className={cn(
-        // Base and track styles
+        // Base and track styles (no changes here)
         "w-full h-1 cursor-pointer appearance-none rounded-lg",
+
+        // 2. Add dark: variants for the thumb styling.
         // Thumb styles
         "[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-sm [&::-webkit-slider-thumb]:ring-1 [&::-webkit-slider-thumb]:ring-neutral-300",
+        "dark:[&::-webkit-slider-thumb]:bg-[#d7d6d5] dark:[&::-webkit-slider-thumb]:ring-neutral-700",
+
         // Active/dragged state for the thumb
         "active:[&::-webkit-slider-thumb]:bg-neutral-950",
+        "active:dark:[&::-webkit-slider-thumb]:bg-white",
+
         // Allow passing additional classes
         className
       )}
