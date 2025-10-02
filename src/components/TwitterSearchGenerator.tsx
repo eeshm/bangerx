@@ -26,8 +26,8 @@ const TwitterSearchGenerator = () => {
   const [feedback, setFeedback] = useState<{ type?: string; message?: string }>({});
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
-  const popularTopics = ['AI tools', 'productivity', 'nextjs', 'startups', 'SaaS' , 'meme'];
-  const popularCreators = ['elonmusk', 'naval', 'kirat_tw', 'levelsio', 'sama', 'mannupaaji','dannypostmaa','eeshmidha1','swyx'];
+  const popularTopics = ['AI tools', 'productivity', 'Next.js', 'startup', 'SaaS' , 'meme', 'modi vs rahul'];
+  const popularCreators = ['elonmusk', 'naval', 'kirat_tw', 'levelsio', 'sama', 'mannupaaji','dannypostmaa','eeshmidha1','swyx','paulg'];
 
   useEffect(() => {
     const savedHistory = localStorage.getItem('bangerSearchHistory');
@@ -345,14 +345,14 @@ const TwitterSearchGenerator = () => {
     { id: 'mega', label: 'Mega Viral' },
   ];
   return (
-    <div className="min-h-screen py-12 px-5 tracking-tight font-mono text-xs ">
+    <div className="min-h-screen py-12 mt-20 px-5 tracking-tight font-mono text-xs ">
       <div className="selection:bg-black selection:text-white dark:selection:bg-theme-dark-subtext dark:selection:text-theme-dark
        flex flex-col min-h-[calc(100vh-6rem)] justify-between">
         <div className="flex-1 overflow-y-auto">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
               <h1 className="text-4xl font-bold text-gray-900 dark:text-theme-dark-text">
-                X Banger's
+                X Bangers
               </h1>
             </div>
             <p className="text-sm text-gray-600 dark:text-theme-dark-subtext  max-w-lg mx-auto">
@@ -433,8 +433,8 @@ const TwitterSearchGenerator = () => {
                   </div>
                   <p className="text-gray-600 dark:text-theme-dark-subtext">
                     {searchMode === 'topic'
-                      ? 'Search for viral tweets about any subject or trend'
-                      : 'Discover viral content from specific creators'
+                      ? 'Uncover the top posts in any niche.'
+                      : 'Pull the greatest hits from any account.'
                     }
                   </p>
                 </div>
@@ -458,18 +458,18 @@ const TwitterSearchGenerator = () => {
                             {validationErrors.username}
                           </p>
                         )}
-                        {/* <div className="mt-2 flex flex-wrap gap-2">
-                          <span className="text-xs text-gray-500">Popular:</span>
-                          {popularCreators.map(creator => (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <span className="text-xs text-gray-500 flex mt-1">Try:</span>
+                          {popularCreators.slice(0,4).map(creator => (
                             <button
                               key={creator}
                               onClick={() => fillExample(creator, 'creator')}
-                              className="text-xs px-2 py-1 hover:bg-[var(--color-card-bg)] cursor-pointer rounded transition-colors"
+                              className="text-xs px-1 py-1 hover:bg-[var(--color-card-bg)] dark:hover:bg-theme-dark-card cursor-pointer rounded transition-colors"
                             >
                               @{creator}
                             </button>
                           ))}
-                        </div> */}
+                        </div>
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 dark:text-theme-dark-text mb-2">
@@ -503,27 +503,27 @@ const TwitterSearchGenerator = () => {
                       <p className="text-xs text-shadow-2xs shadow-amber-200 text-gray-500 mt-1">
                         Use quotes for exact phrases, OR for alternatives
                       </p>
-                      {/* <div className="mt-2 flex flex-wrap gap-2">
+                      <div className="mt-2 flex flex-wrap gap-2">
                         <span className="text-xs relative top-1 text-gray-500">Popular:</span>
-                        {popularTopics.map(topic => (
+                        {popularTopics.slice(0,4).map(topic => (
                           <button
                             key={topic}
                             onClick={() => fillExample(topic, 'topic')}
-                            className={cn("text-xs px-2 py-1 hover:bg-[var(--color-card-bg)]  text-black rounded",
+                            className={cn("text-xs px-1 py-1 hover:bg-[var(--color-card-bg)] dark:hover:bg-theme-dark-card  dark:text-theme-dark-text text-black rounded",
                               " transition-colors cursor-pointer"
                             )}
                           >
                             {topic}
                           </button>
                         ))}
-                      </div> */}
+                      </div>
                     </div>
                   )}
                 </div>
 
                 <div className=" rounded-lg p-4 mb-8">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-gray-900 dark:text-theme-dark-text">Engagement Thresholds</h3>
+                    <h3 className="font-semibold text-gray-900 dark:text-theme-dark-text">Set the Viral Bar</h3>
                     <div className="flex gap-2">
                       {presets.map(({ id, label }) => (
                         <button
@@ -653,7 +653,7 @@ const TwitterSearchGenerator = () => {
                     <div className="flex gap-3 w-full">
                       <button
                         onClick={openInNewTab}
-                        className={cn("flex-1 bg-theme-fg dark:bg-theme-dark-card text-white font-medium",
+                        className={cn("flex-1 bg-theme-fg dark:bg-black text-white font-medium",
                           "py-3 px-4 rounded-lg",
                           "transition-colors flex items-center justify-center gap-2",
                           "hover:bg-gray-950 dark:hover:bg-gray-950 ",
@@ -684,7 +684,7 @@ const TwitterSearchGenerator = () => {
 
                     <div className="mt-4 p-3  rounded-lg">
                       <p className="text-xs flex items-center gap-1 dark:text-theme-dark-subtext">
-                        <span>Not enought results? Trying lowering the bar or use the "Low Viral" preset.
+                        <span>Not enough hits? Try lowering the engagement bar or use a preset like "Low Viral".
                         </span>
                       </p>
                     </div>
@@ -774,7 +774,7 @@ const TwitterSearchGenerator = () => {
 
         <div className="text-center mt-8 text-gray-600  dark:text-theme-dark-text">
           <p className="text-sm">
-            Built with LOVE • Find viral content without API limits
+            Your cheat code for viral content. No limits.
           </p>
         </div>
       </div>

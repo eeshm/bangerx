@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/toggle-mode";
 
@@ -24,23 +24,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-theme-bg dark:bg-theme-dark `}
-      >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-          <div className="fixed bottom-4 right-4 z-50">
-            <ModeToggle />
-          </div>
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+return (
+  <html lang="en">
+    <body
+      className={`${geistSans.variable} ${geistMono.variable} antialiased bg-theme-bg dark:bg-theme-dark `}
+    >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+        <div className="m-4">
+          <ModeToggle />
+        </div>
+        {children}
+      </ThemeProvider>
+    </body>
+  </html>
+);
 }

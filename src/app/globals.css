@@ -134,8 +134,8 @@
   --sidebar-ring:oklch(0.556 0 0);
   --slider-progress-color: #d7d6d5;
   --slider-track-color: #1b1913;    
-
 }
+
 
 @layer base {
   * {
@@ -146,5 +146,4 @@
     @apply bg-background text-foreground;
 
   }
-
 }
