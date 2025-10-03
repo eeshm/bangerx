@@ -345,13 +345,13 @@ const TwitterSearchGenerator = () => {
     { id: 'mega', label: 'Mega Viral' },
   ];
   return (
-    <div className="min-h-screen py-12 mt-20 px-5 tracking-tight font-mono text-xs ">
+    <div className="min-h-screen pt-12 mt-5 px-5 tracking-tight font-mono text-xs ">
       <div className="selection:bg-black selection:text-white dark:selection:bg-theme-dark-subtext dark:selection:text-theme-dark
        flex flex-col min-h-[calc(100vh-6rem)] justify-between">
         <div className="flex-1 overflow-y-auto">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-theme-dark-text">
+              <h1 className="text-4xl font-bold text-gray-900 underline underline-offset-8  decoration-[var(--color-orange)]   dark:text-theme-dark-text">
                 X Bangers
               </h1>
             </div>
@@ -364,7 +364,7 @@ const TwitterSearchGenerator = () => {
               <div className="bg-brand-bg min-h-screen flex justify-center p-4 sm:p-6 lg:p-8">
                 <div className="max-w-4xl w-full mx-auto text-center">
 
-                  <h2 className="text-3xl font-bold text-gray-800n dark:text-theme-dark-text mb-4">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-800n dark:text-theme-dark-text mb-4">
                     How we huntin' today?
 
                   </h2>
@@ -375,23 +375,7 @@ const TwitterSearchGenerator = () => {
                   {/* Grid layout for responsive cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                    {/* Card 1: Find by Keyword */}
-                    <button
-                      onClick={() => selectSearchMode('topic')}
-                      className="flex flex-col p-8 bg-brand-card border border-brand-border rounded-2xl text-left transition-all duration-300 ease-in-out  dark:hover:shadow-theme-dark-card hover:shadow-lg hover:border-brand-primary hover:-translate-y-1 group"
-                    >
-                      <div className="flex items-center gap-4 mb-3">
-                        {/* <MagnifyingGlassIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find by Keyword/Topic</h3>
-                      </div>
-                      <p className="text-gray-600  dark:text-theme-dark-subtext leading-relaxed mb-6">
-                        Drop a keyword, find the sauce. See what's actually hitting in any niche.                </p>
-                      <div className="mt-auto text-sm text-gray-500  dark:text-theme-dark-subtext font-mono">
-                        "ai tools", "memes" ,"saas" →
-                      </div>
-                    </button>
-
-                    {/* Card 2: Find from Username */}
+                    {/* Card 1: Find from Username */}
                     <button
                       onClick={() => selectSearchMode('creator')}
                       className="flex flex-col p-8 bg-brand-card border border-brand-border rounded-2xl text-left transition-all duration-300 ease-in-out hover:shadow-lg hover:border-brand-primary dark:hover:shadow-theme-dark-card hover:-translate-y-1 group"
@@ -404,6 +388,22 @@ const TwitterSearchGenerator = () => {
                         Find out what makes top accounts tick. We'll pull up their most legendary posts.                </p>
                       <div className="mt-auto text-sm text-gray-500 dark:text-theme-dark-subtext">
                         @elonmusk, @naval, @kirat_tw, @mannupaaji →
+                      </div>
+                    </button>
+                    
+                    {/* Card 2 */}
+                     <button
+                      onClick={() => selectSearchMode('topic')}
+                      className="flex flex-col p-8 bg-brand-card border border-brand-border rounded-2xl text-left transition-all duration-300 ease-in-out  dark:hover:shadow-theme-dark-card hover:shadow-lg hover:border-brand-primary hover:-translate-y-1 group"
+                    >
+                      <div className="flex items-center gap-4 mb-3">
+                        {/* <MagnifyingGlassIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find by Keyword/Topic</h3>
+                      </div>
+                      <p className="text-gray-600  dark:text-theme-dark-subtext leading-relaxed mb-6">
+                        Drop a keyword, find the sauce. See what's actually hitting in any niche.                </p>
+                      <div className="mt-auto text-sm text-gray-500  dark:text-theme-dark-subtext font-mono">
+                        "ai tools", "memes" ,"saas" →
                       </div>
                     </button>
 
@@ -772,7 +772,7 @@ const TwitterSearchGenerator = () => {
           )}
         </div>
 
-        <div className="text-center mt-8 text-gray-600  dark:text-theme-dark-text">
+        <div className="text-center my-8 text-gray-600  dark:text-theme-dark-text">
           <p className="text-sm">
             Your cheat code for viral content. No limits.
           </p>

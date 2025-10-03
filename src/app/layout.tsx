@@ -25,17 +25,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 return (
-  <html lang="en">
+  <html lang="en" suppressHydrationWarning>
     <body
       className={`${geistSans.variable} ${geistMono.variable} antialiased bg-theme-bg dark:bg-theme-dark `}
     >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-        <div className="m-4">
+        <div className="flex justify-end mr-4 mt-2">
           <ModeToggle />
         </div>
         {children}
