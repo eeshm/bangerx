@@ -347,6 +347,13 @@ const TwitterSearchGenerator = () => {
     { id: 'medium', label: 'High Viral' },
     { id: 'mega', label: 'Mega Viral' },
   ];
+
+const link = "https://banger-x.vercel.app";
+
+const tweetText = `Discovering the best viral content thanks to BangerX. Check it out: ${link} #ContentDiscovery #bangerx`;
+
+const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+
   return (
     <div className="min-h-screen pt-12 px-5 tracking-tight font-mono text-xs ">
       <div className="selection:bg-black selection:text-white dark:selection:bg-theme-dark-subtext dark:selection:text-theme-dark
@@ -398,7 +405,7 @@ const TwitterSearchGenerator = () => {
                         <p className="text-gray-600 leading-relaxed mb-6 dark:text-theme-dark-subtext">
                           Find out what makes top accounts tick. We'll pull up their most legendary posts.
                         </p>
-                        <div className="mt-auto text-sm text-gray-500 dark:text-theme-dark-subtext">
+                        <div className="mt-auto  text-gray-500 dark:text-theme-dark-subtext">
                           @elonmusk, @naval, @kirat_tw, @mannupaaji →
                         </div>
                       </button>
@@ -419,7 +426,7 @@ const TwitterSearchGenerator = () => {
                         <p className="text-gray-600 dark:text-theme-dark-subtext leading-relaxed mb-6">
                           Drop a keyword, find the sauce. See what's actually hitting in any niche.
                         </p>
-                        <div className="mt-auto text-sm text-gray-500 dark:text-theme-dark-subtext font-mono">
+                        <div className="mt-auto  text-gray-500 dark:text-theme-dark-subtext font-mono">
                           "ai tools", "meme", "sora 2 codes" →
                         </div>
                       </button>
@@ -791,12 +798,17 @@ const TwitterSearchGenerator = () => {
         </div>
 
         <div className="text-center my-8 text-gray-600  space-y-1 dark:text-theme-dark-text">
-          <p className="text-sm">
+          <p className="text">
             Your cheat code for viral content. No limits.
           </p>
+          <div className='flex flex-col space-y-1'>
           <Link href={"https://x.com/eeshmidha1"} target='_blank' className='underline underline-offset-2 '>
           created by eesh
           </Link>
+          <Link href={tweetUrl} className='underline text-[10px]'>
+          share on x <ExternalLink className='inline-flex size-2'/>
+          </Link>
+          </div>
         </div>
       </div>
     </div>

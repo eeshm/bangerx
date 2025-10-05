@@ -63,8 +63,8 @@ export const metadata: Metadata = {
     site: '@eeshmidha1', 
     creator: '@eeshmidha1',
     title: 'BangerX - X search on steroids',
-    description: 'Find viral tweets on X instantly. No API, no limits, completely free. 🔥',
-    images: ['/public/dark1.png', '/public/dark2.png'],
+    description: 'Find viral tweets on X instantly. No API, no limits, completely free.',
+    images: ['/light1.png'], 
   },
 
   // Additional Meta Tags
