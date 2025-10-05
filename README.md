@@ -6,7 +6,7 @@
 <img src="https://img.shields.io/badge/TailwindCSS-000000.svg?style=for-the-badge&logo=TailwindCSS&logoColor=white">
 </p>
 
-![BangerX Preview](/public/dark1.png)
+![BangerX Preview](/public/light1.png)
 
 **<p align="center">X serach on steroids - https://banger-x.vercel.app</p>**
 
@@ -15,24 +15,24 @@ Your X feed is mid because you don't know how to find quality content.This is a 
 
 ##  Features
 
--  **Two Search Modes**
-  - Topic Hunt: Find viral tweets by keywords
-  - Creator Deep Dive: Discover top posts from specific users
+###  Two Search Modes
+- **Topic Hunt**: Find viral tweets by keywords  
+- **Creator Deep Dive**: Discover top posts from specific users
 
--  **Engagement Filtering**
-  - Adjustable thresholds (likes, retweets, replies)
-  - Quick presets: Low, High, Mega viral
-  - Custom slider controls
+###  Engagement Filtering
+- Adjustable thresholds (likes, retweets, replies)
+- Quick presets: **Low**, **High**, **Mega Viral**
+- Custom slider controls
 
--  **Advanced Filters**
-  - Media-only option
-  - Exclude retweets
-  - Keyword filtering for creator searches
+###  Advanced Filters
+- Media-only option
+- Exclude retweets
+- Keyword filtering for creator searches
 
--  **User Experience**
-  - No signup required
-  - Search history with quick reload
-  - One-click open in X or copy URL
+###  User Experience
+- No signup required
+- Search history with quick reload
+- One-click open in X or copy URL
 
 ## Quick Start
 ```bash
