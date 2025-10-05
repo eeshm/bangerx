@@ -1,10 +1,13 @@
 
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Search, Twitter, Copy, ExternalLink, User, Hash, AlertCircle, TrendingUp, History, ChevronDown, ChevronUp, Trash2, Clock, Info, ArrowLeft, Sparkles, Zap, Flame } from 'lucide-react';
+import { Search, Twitter, Copy, ExternalLink, User, Hash, AlertCircle, TrendingUp, History, ChevronDown, ChevronUp, Trash2, Clock, Info, ArrowLeft, Sparkles, Zap, Flame} from 'lucide-react';
 import { PlaceholdersAndVanishInput } from './ui/placeholders-and-vanish-input';
 import { cn } from '@/lib/utils';
 import StyledSlider from './Slider';
+import { BlurFade } from './ui/blur-fade';
+import Link from 'next/link';
+
 
 const TwitterSearchGenerator = () => {
   const [currentStep, setCurrentStep] = useState('selection');
@@ -26,8 +29,8 @@ const TwitterSearchGenerator = () => {
   const [feedback, setFeedback] = useState<{ type?: string; message?: string }>({});
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
-  const popularTopics = ['AI tools', 'productivity', 'Next.js', 'startup', 'SaaS' , 'meme', 'modi vs rahul'];
-  const popularCreators = ['elonmusk', 'naval', 'kirat_tw', 'levelsio', 'sama', 'mannupaaji','dannypostmaa','eeshmidha1','swyx','paulg'];
+  const popularTopics = ['ai tools', 'meme', 'crypto','sora','productivity', 'startup', 'SaaS', 'modi vs rahul'];
+  const popularCreators = ['elonmusk', 'naval', 'kirat_tw', 'levelsio', 'sama', 'mannupaaji', 'dannypostmaa', 'eeshmidha1', 'swyx', 'paulg'];
 
   useEffect(() => {
     const savedHistory = localStorage.getItem('bangerSearchHistory');
@@ -345,68 +348,83 @@ const TwitterSearchGenerator = () => {
     { id: 'mega', label: 'Mega Viral' },
   ];
   return (
-    <div className="min-h-screen pt-12 mt-5 px-5 tracking-tight font-mono text-xs ">
+    <div className="min-h-screen pt-12 px-5 tracking-tight font-mono text-xs ">
       <div className="selection:bg-black selection:text-white dark:selection:bg-theme-dark-subtext dark:selection:text-theme-dark
        flex flex-col min-h-[calc(100vh-6rem)] justify-between">
         <div className="flex-1 overflow-y-auto">
           <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <h1 className="text-4xl font-bold text-gray-900 underline underline-offset-8  decoration-[var(--color-orange)]   dark:text-theme-dark-text">
-                X Bangers
-              </h1>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-theme-dark-subtext  max-w-lg mx-auto">
-              A cheat code for X's native search. Find what's actually popping off, no API, no BS.
-            </p>
+            <BlurFade delay={0.10}>
+              <div className="flex items-center justify-center gap-3 mb-8">
+                <h1 className="text-4xl font-bold text-gray-900 tracking-wider underline underline-offset-8  decoration-[var(--color-orange)]   dark:text-theme-dark-text">
+                  BangerX
+                </h1>
+              </div>
+            </BlurFade>
+            <BlurFade delay={0.10 * 2}>
+              <p className="text-sm text-gray-600 dark:text-theme-dark-subtext  max-w-lg mx-auto">
+                A cheat code for X's native search. Find what's actually popping off, no API, no BS.
+              </p>
+            </BlurFade>
           </div>
           <div className="">
             {currentStep === 'selection' ? (
               <div className="bg-brand-bg min-h-screen flex justify-center p-4 sm:p-6 lg:p-8">
                 <div className="max-w-4xl w-full mx-auto text-center">
 
-                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-800n dark:text-theme-dark-text mb-4">
-                    How we huntin' today?
-
-                  </h2>
-                  <p className="text-gray-500 mb-12 max-w-xl mx-auto dark:text-theme-dark-subtext">
-                    Two paths to find the fire. Pick one.
-                  </p>
+                  <BlurFade delay={0.10 * 3}>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800n dark:text-theme-dark-text mb-4">
+                      How we huntin' today?
+                    </h2>
+                  </BlurFade>
+                  <BlurFade delay={0.10 * 4}>
+                    <p className="text-gray-500 mb-12 max-w-xl mx-auto dark:text-theme-dark-subtext">
+                      Two paths to find the fire. Pick one.
+                    </p>
+                  </BlurFade>
 
                   {/* Grid layout for responsive cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Card 1 */}
+                    <BlurFade delay={0.10 * 5}>
+                      <div className='p-1 border-2 dark:[box-shadow:3px_3px_40px_5px_#c6c6c635_inset]   [box-shadow:3px_3px_40px_5px_#c6c6c635] rounded-md'>
+                      <button
+                        onClick={() => selectSearchMode('creator')}
+                        className="flex w-full h-full  sm:h-50 md:h-70 bg-card-bg border-none dark:border-theme-dark-card dark:bg-theme-dark-card/95 flex-col p-8  border-[0.1px]  rounded-sm text-left transition-all duration-300 ease-in-out hover:shadow-lg hover:border-brand-primary dark:hover:shadow-theme-dark-card hover:-translate-y-1 group flex-grow"
+                      >
+                        <div className="flex items-center gap-4 mb-3">
+                          {/* <UserIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find from Username</h3>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed mb-6 dark:text-theme-dark-subtext">
+                          Find out what makes top accounts tick. We'll pull up their most legendary posts.
+                        </p>
+                        <div className="mt-auto text-sm text-gray-500 dark:text-theme-dark-subtext">
+                          @elonmusk, @naval, @kirat_tw, @mannupaaji →
+                        </div>
+                      </button>
+                      </div>
+                    </BlurFade>
 
-                    {/* Card 1: Find from Username */}
-                    <button
-                      onClick={() => selectSearchMode('creator')}
-                      className="flex flex-col p-8 bg-brand-card border border-brand-border rounded-2xl text-left transition-all duration-300 ease-in-out hover:shadow-lg hover:border-brand-primary dark:hover:shadow-theme-dark-card hover:-translate-y-1 group"
-                    >
-                      <div className="flex items-center gap-4 mb-3">
-                        {/* <UserIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find from Username</h3>
-                      </div>
-                      <p className="text-gray-600 leading-relaxed mb-6 dark:text-theme-dark-subtext">
-                        Find out what makes top accounts tick. We'll pull up their most legendary posts.                </p>
-                      <div className="mt-auto text-sm text-gray-500 dark:text-theme-dark-subtext">
-                        @elonmusk, @naval, @kirat_tw, @mannupaaji →
-                      </div>
-                    </button>
-                    
                     {/* Card 2 */}
-                     <button
-                      onClick={() => selectSearchMode('topic')}
-                      className="flex flex-col p-8 bg-brand-card border border-brand-border rounded-2xl text-left transition-all duration-300 ease-in-out  dark:hover:shadow-theme-dark-card hover:shadow-lg hover:border-brand-primary hover:-translate-y-1 group"
-                    >
-                      <div className="flex items-center gap-4 mb-3">
-                        {/* <MagnifyingGlassIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find by Keyword/Topic</h3>
+                    <BlurFade delay={0.10 * 5}>
+                      <div className='p-1 border-2 dark:[box-shadow:3px_3px_40px_5px_#c6c6c635_inset] rounded-md'>
+                      <button
+                        onClick={() => selectSearchMode('topic')}
+                        className="flex flex-col w-full h-full sm:h-50 bg-card-bg  border-none dark:border-theme-dark-card dark:bg-theme-dark-card/95  md:h-70 p-8  border-[0.1px]  rounded-sm text-left transition-all duration-300 ease-in-out dark:hover:shadow-theme-dark-card hover:shadow-lg hover:border-brand-primary hover:-translate-y-1 group flex-grow"
+                      >
+                        <div className="flex items-center gap-4 mb-3">
+                          {/* <MagnifyingGlassIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find by Keyword/Topic</h3>
+                        </div>
+                        <p className="text-gray-600 dark:text-theme-dark-subtext leading-relaxed mb-6">
+                          Drop a keyword, find the sauce. See what's actually hitting in any niche.
+                        </p>
+                        <div className="mt-auto text-sm text-gray-500 dark:text-theme-dark-subtext font-mono">
+                          "ai tools", "meme", "sora 2 codes" →
+                        </div>
+                      </button>
                       </div>
-                      <p className="text-gray-600  dark:text-theme-dark-subtext leading-relaxed mb-6">
-                        Drop a keyword, find the sauce. See what's actually hitting in any niche.                </p>
-                      <div className="mt-auto text-sm text-gray-500  dark:text-theme-dark-subtext font-mono">
-                        "ai tools", "memes" ,"saas" →
-                      </div>
-                    </button>
-
+                    </BlurFade>
                   </div>
                 </div>
               </div>
@@ -460,7 +478,7 @@ const TwitterSearchGenerator = () => {
                         )}
                         <div className="mt-2 flex flex-wrap gap-2">
                           <span className="text-xs text-gray-500 flex mt-1">Try:</span>
-                          {popularCreators.slice(0,4).map(creator => (
+                          {popularCreators.slice(0, 4).map(creator => (
                             <button
                               key={creator}
                               onClick={() => fillExample(creator, 'creator')}
@@ -505,7 +523,7 @@ const TwitterSearchGenerator = () => {
                       </p>
                       <div className="mt-2 flex flex-wrap gap-2">
                         <span className="text-xs relative top-1 text-gray-500">Popular:</span>
-                        {popularTopics.slice(0,4).map(topic => (
+                        {popularTopics.slice(0, 4).map(topic => (
                           <button
                             key={topic}
                             onClick={() => fillExample(topic, 'topic')}
@@ -607,7 +625,7 @@ const TwitterSearchGenerator = () => {
                         checked={excludeRetweets}
                         onChange={(e) => setExcludeRetweets(e.target.checked)}
                         className={cn("w-4 h-4 rounded",
-                          "accent-[var(--color-theme-fg)] dark:accent-[var(--color-theme-dark-subtext)]"
+                          "accent-theme-dark dark:accent-theme-bg"
                         )}
                       />
                       <span className="text-sm text-gray-700 dark:text-theme-dark-subtext">Exclude retweets</span>
@@ -653,10 +671,10 @@ const TwitterSearchGenerator = () => {
                     <div className="flex gap-3 w-full">
                       <button
                         onClick={openInNewTab}
-                        className={cn("flex-1 bg-theme-fg dark:bg-black text-white font-medium",
+                        className={cn("flex-1 bg-theme-fg dark:bg-theme-dark-card [box-shadow:3px_3px_40px_5px_#c6c6c635_inset]  hover:shadow-none text-white font-medium",
                           "py-3 px-4 rounded-lg",
                           "transition-colors flex items-center justify-center gap-2",
-                          "hover:bg-gray-950 dark:hover:bg-gray-950 ",
+                          "hover:bg-gray-950 ",
                           "transition-all duration-150 ")}
                       >
                         <ExternalLink className="w-4 h-4" />
@@ -664,21 +682,21 @@ const TwitterSearchGenerator = () => {
                       </button>
 
                       {/* <div className=''> */}
-                        <button
-                          onClick={copyToClipboard}
-                          className={cn(`justify-center rounded-lg border-2 gap-2 ${copied
-                            ? 'bg-[var(--color-orange)] text-white'
-                            : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                            }`,
-                            "font-medium text-sm transition-colors flex items-center",
-                            "w-[calc(100%-80%)] text-center",
-                            "transition-all duration-150 hover:scale-[0.98] cursor-pointer",
-                            "md:flex hidden"
-                          )}
-                        >
-                          <Copy className="w-4 h-4" />
-                          {copied ? 'Copied!' : 'Copy'}
-                        </button>
+                      <button
+                        onClick={copyToClipboard}
+                        className={cn(`justify-center rounded-lg border-2 gap-2 ${copied
+                          ? 'bg-[var(--color-orange)] text-white'
+                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`,
+                          "font-medium text-sm transition-colors flex items-center",
+                          "w-[calc(100%-80%)] text-center",
+                          "transition-all duration-150 hover:scale-[0.98] cursor-pointer",
+                          "md:flex hidden"
+                        )}
+                      >
+                        <Copy className="w-4 h-4" />
+                        {copied ? 'Copied!' : 'Copy'}
+                      </button>
                       {/* </div> */}
                     </div>
 
@@ -722,7 +740,7 @@ const TwitterSearchGenerator = () => {
                     <span className="text-xs text-gray-500">Recent searches</span>
                     <button
                       onClick={clearHistory}
-                      className="text-xs text-red-500 hover:text-red-700 dark:text-red-700 flex items-center gap-1 cursor-pointer"
+                      className="text-xs text-red-500 hover:text-red-700 dark:text-red-500 flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                       Clear All
@@ -772,10 +790,13 @@ const TwitterSearchGenerator = () => {
           )}
         </div>
 
-        <div className="text-center my-8 text-gray-600  dark:text-theme-dark-text">
+        <div className="text-center my-8 text-gray-600  space-y-1 dark:text-theme-dark-text">
           <p className="text-sm">
             Your cheat code for viral content. No limits.
           </p>
+          <Link href={"https://x.com/eeshmidha1"} target='_blank' className='underline underline-offset-2 '>
+          created by eesh
+          </Link>
         </div>
       </div>
     </div>

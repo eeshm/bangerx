@@ -13,14 +13,12 @@
   --color-theme-dark-subtext: #d7d6d5;
   --color-theme-dark-card: #1b1913;
 
-
   --color-theme-fg: #26251e;
   --color-h1:#000000;
   --color-orange:#f54e00;
-  --color-card-bg:#f2f1ed;
+  --color-card-bg:#f0efeb;
 }
 /* f7f7f4 */
-
 
 @theme inline {
   --color-background: var(--background);
@@ -60,7 +58,7 @@
   --radius-md:calc(var(--radius) - 2px);
   --radius-lg:var(--radius);
   --radius-xl:calc(var(--radius) + 4px);
-  
+
 }
 
 :root {
@@ -136,7 +134,6 @@
   --slider-track-color: #1b1913;    
 }
 
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -146,4 +143,9 @@
     @apply bg-background text-foreground;
 
   }
+}
+
+::view-transition-old(root), ::view-transition-new(root) {
+    animation:none;
+    mix-blend-mode:normal;
 }
