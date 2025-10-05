@@ -372,7 +372,7 @@ const TwitterSearchGenerator = () => {
                 <div className="max-w-4xl w-full mx-auto text-center">
 
                   <BlurFade delay={0.10 * 3}>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800n dark:text-theme-dark-text mb-4">
+                    <h2 className="text-2xl sm:text-3xl  tracking-tighter font-bold text-gray-800 dark:text-theme-dark-text mb-4">
                       How we huntin' today?
                     </h2>
                   </BlurFade>

@@ -6,7 +6,7 @@ import { ModeToggle } from "@/components/toggle-mode";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import Link from "next/link";
 import { Github } from "lucide-react";
-
+import { Analytics } from "@vercel/analytics/next"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://bangerx.com', // Replace with your actual domain
+    url: 'https://banger-x.vercel.app',
     siteName: 'BangerX',
     title: 'BangerX - Hunt Viral Tweets Without API Limits',
     description: 'Find viral tweets on X instantly. Discover bangers from any creator or topic. No API, no limits, completely free. 🔥',
     images: [
       {
-        url: '/public/dark1.png', // Replace with your actual OG image URL
+        url: '/public/dark1.png',
         width: 1200,
         height: 630,
         alt: 'BangerX - Hunt Viral Tweets',
@@ -60,8 +60,8 @@ export const metadata: Metadata = {
   // Twitter Card
   twitter: {
     card: 'summary_large_image',
-    site: '@eeshmidha1', // Replace with your Twitter handle
-    creator: '@eeshmidha1', // Replace with your Twitter handle
+    site: '@eeshmidha1', 
+    creator: '@eeshmidha1',
     title: 'BangerX - X search on steroids',
     description: 'Find viral tweets on X instantly. No API, no limits, completely free. 🔥',
     images: ['/public/dark1.png', '/public/dark2.png'],
@@ -82,9 +82,9 @@ export const metadata: Metadata = {
 
 
   // Additional
-  metadataBase: new URL('https://bangerx.com'),
+  metadataBase: new URL('https://banger-x.vercel.app'),
   alternates: {
-    canonical: 'https://bangerx.com',
+    canonical: 'https://banger-x.vercel.app',
   },
 
   // App-specific
@@ -116,15 +116,16 @@ return (
         >
         <div className="flex justify-between mx-4 mt-4">
           <div className="p-2">
-          <Link href={"https://github.com/eeshm/twt"} target="_blank">
+          <Link href={"https://github.com/eeshm/bangerx"} target="_blank">
           <Github className="size-6 stroke-[1.5px]"/>
           </Link>
           </div>
           <div>
           <AnimatedThemeToggler className=""/>
           </div>
-        </div>
+        </div>  
         {children}
+        <Analytics/>
       </ThemeProvider>
     </body>
   </html>
