@@ -8,7 +8,7 @@
 
 ![BangerX Preview](/public/light1.png)
 
-**<p align="center">X serach on steroids - https://banger-x.vercel.app</p>**
+**<p align="center">X search on steroids - https://banger-x.vercel.app</p>**
 
 ## Why BangerX?
 Your X feed is mid because you don't know how to find quality content.This is a tool to help you discover gold and even get ideas for your tweets.
