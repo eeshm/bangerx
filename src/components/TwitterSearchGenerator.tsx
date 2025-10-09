@@ -355,7 +355,7 @@ const tweetText = `Discovering the best viral content thanks to BangerX. Check i
 const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
 
   return (
-    <div className="min-h-screen pt-12 px-5 tracking-tight font-mono text-xs ">
+    <div className="min-h-screen pt-12 px-5 tracking-tight font-mono text-xs">
       <div className="selection:bg-black selection:text-white dark:selection:bg-theme-dark-subtext dark:selection:text-theme-dark
        flex flex-col min-h-[calc(100vh-6rem)] justify-between">
         <div className="flex-1 overflow-y-auto">
@@ -375,7 +375,7 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
           </div>
           <div className="">
             {currentStep === 'selection' ? (
-              <div className="bg-brand-bg min-h-screen flex justify-center p-4 sm:p-6 lg:p-8">
+              <div className="bg-brand-bg min-h-screen flex justify-center p-4 sm:p-6 lg:p-8 scroll-smooth">
                 <div className="max-w-4xl w-full mx-auto text-center">
 
                   <BlurFade delay={0.10 * 3}>
@@ -802,12 +802,12 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
             Your cheat code for viral content. No limits.
           </p>
           <div className='flex flex-col space-y-1'>
-          <Link href={"https://x.com/eeshmidha1"} target='_blank' className='underline underline-offset-2 '>
+          {/* <Link href={"https://x.com/eeshmidha1"} target='_blank' className='underline underline-offset-2 '>
           created by eesh
-          </Link>
-          <Link href={tweetUrl} className='underline text-[10px]'>
+          </Link> */}
+          {/* <Link href={tweetUrl} className='underline text-[10px]'>
           share on x <ExternalLink className='inline-flex size-2'/>
-          </Link>
+          </Link> */}
           </div>
         </div>
       </div>
