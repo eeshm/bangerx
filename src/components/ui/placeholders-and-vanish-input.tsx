@@ -180,14 +180,14 @@ export function PlaceholdersAndVanishInput({
   return (
     <form
       className={cn(
-        "w-full relative dark:bg-zinc-800 h-12 bg-white rounded-md overflow-hidden shadow-md dark:hover:shadow-theme-dark-card border transition duration-200",
+        "w-full relative dark:bg-zinc-800 h-10 bg-white rounded-md overflow-hidden shadow-md dark:hover:shadow-theme-dark-card border transition duration-200",
         value && "bg-gray-50"
       )}
       onSubmit={handleSubmit}
     >
       <canvas
         className={cn(
-          "absolute pointer-events-none text-base transform scale-50 top-[20%] left-2  origin-top-left filter invert dark:invert-0 pr-20",
+          "absolute pointer-events-none text-[14px] transform scale-50 top-[20%] left-2  origin-top-left filter invert dark:invert-0 pr-20",
           !animating ? "opacity-0" : "opacity-100"
         )}
         ref={canvasRef}

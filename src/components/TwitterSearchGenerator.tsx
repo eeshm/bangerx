@@ -1,7 +1,7 @@
 
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Search, Twitter, Copy, ExternalLink, User, Hash, AlertCircle, TrendingUp, History, ChevronDown, ChevronUp, Trash2, Clock, Info, ArrowLeft, Sparkles, Zap, Flame} from 'lucide-react';
+import { Search, Twitter, Copy, ExternalLink, User, Hash, AlertCircle, TrendingUp, History, ChevronDown, ChevronUp, Trash2, Clock, Info, ArrowLeft, Sparkles, Zap, Flame, Car, Sliders } from 'lucide-react';
 import { PlaceholdersAndVanishInput } from './ui/placeholders-and-vanish-input';
 import { cn } from '@/lib/utils';
 import StyledSlider from './Slider';
@@ -29,7 +29,7 @@ const TwitterSearchGenerator = () => {
   const [feedback, setFeedback] = useState<{ type?: string; message?: string }>({});
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
-  const popularTopics = ['ai tools', 'meme', 'crypto','sora','productivity', 'startup', 'SaaS', 'modi vs rahul'];
+  const popularTopics = ['ai tools', 'meme', 'crypto', 'sora', 'productivity', 'startup', 'SaaS', 'modi vs rahul'];
   const popularCreators = ['elonmusk', 'naval', 'kirat_tw', 'levelsio', 'sama', 'mannupaaji', 'dannypostmaa', 'eeshmidha1', 'swyx', 'paulg'];
 
   useEffect(() => {
@@ -108,16 +108,6 @@ const TwitterSearchGenerator = () => {
     if (searchMode === 'topic' && topicKeywords.trim() && topicKeywords.trim().length < 2) {
       errors.topic = 'Search term too short - try at least 2 characters';
     }
-
-    // Sanity checks for engagement
-    if (minReplies > minLikes && minReplies > 0 && minLikes > 0) {
-      errors.engagement = 'Replies typically can\'t exceed likes - consider adjusting thresholds';
-    }
-
-    if (minRetweets > minLikes && minRetweets > 0 && minLikes > 0) {
-      errors.engagement = 'Retweets typically can\'t exceed likes - consider adjusting thresholds';
-    }
-
     return errors;
   };
 
@@ -308,15 +298,6 @@ const TwitterSearchGenerator = () => {
     localStorage.setItem('bangerSearchHistory', JSON.stringify(newHistory));
   };
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(generatedUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
-  };
 
   const openInNewTab = () => {
     saveToHistory();
@@ -343,94 +324,67 @@ const TwitterSearchGenerator = () => {
   };
 
   const presets = [
-    { id: 'low', label: 'Low Viral' },
-    { id: 'medium', label: 'High Viral' },
-    { id: 'mega', label: 'Mega Viral' },
+    { id: 'low', label: 'Low' },
+    { id: 'medium', label: 'High' },
+    { id: 'mega', label: 'Mega' },
   ];
 
-const link = "https://banger-x.vercel.app";
+  const link = "https://banger-x.vercel.app";
 
-const tweetText = `Discovering the best viral content thanks to BangerX. Check it out: ${link} #ContentDiscovery #bangerx`;
+  const tweetText = `Discovering the best viral content thanks to BangerX. Check it out: ${link} #ContentDiscovery #bangerx`;
 
-const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+  const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
 
   return (
-    <div className="min-h-screen pt-12 px-5 tracking-tight font-mono text-xs">
+    <div className="min-h-screen pt-16 px-6 tracking-tight font-mono">
       <div className="selection:bg-black selection:text-white dark:selection:bg-theme-dark-subtext dark:selection:text-theme-dark
-       flex flex-col min-h-[calc(100vh-6rem)] justify-between">
+       flex flex-col min-h-[calc(100vh-6rem)] justify-between max-w-4xl mx-auto">
         <div className="flex-1 overflow-y-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <BlurFade delay={0.10}>
-              <div className="flex items-center justify-center gap-3 mb-8">
-                <h1 className="text-4xl font-bold text-gray-900 tracking-wider underline underline-offset-8  decoration-[var(--color-orange)]   dark:text-theme-dark-text">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <h1 className="text-4xl font-bold text-gray-900 tracking-tight dark:text-theme-dark-text">
                   BangerX
                 </h1>
               </div>
             </BlurFade>
             <BlurFade delay={0.10 * 2}>
-              <p className="text-sm text-gray-600 dark:text-theme-dark-subtext  max-w-lg mx-auto">
-                A cheat code for X's native search. Find what's actually popping off, no API, no BS.
+              <p className="text-xs text-gray-600 dark:text-theme-dark-subtext  max-w-lg mx-auto">
+                A cheat code for <span className=' underline underline-offset-5 decoration-[#f54e00] decoration-wavy'>X's</span> native search.
               </p>
             </BlurFade>
           </div>
           <div className="">
             {currentStep === 'selection' ? (
-              <div className="bg-brand-bg min-h-screen flex justify-center p-4 sm:p-6 lg:p-8 scroll-smooth">
+              <div className="bg-brand-bg flex justify-center p-4 sm:p-6 lg:p-8 scroll-smooth">
                 <div className="max-w-4xl w-full mx-auto text-center">
-
                   <BlurFade delay={0.10 * 3}>
-                    <h2 className="text-2xl sm:text-3xl  tracking-tighter font-bold text-gray-800 dark:text-theme-dark-text mb-4">
+                    <h2 className="text-xl sm:text-2xl tracking-tighter font-bold text-gray-800 dark:text-theme-dark-text mb-4">
                       How we huntin' today?
                     </h2>
                   </BlurFade>
-                  <BlurFade delay={0.10 * 4}>
-                    <p className="text-gray-500 mb-12 max-w-xl mx-auto dark:text-theme-dark-subtext">
-                      Two paths to find the fire. Pick one.
-                    </p>
-                  </BlurFade>
+
 
                   {/* Grid layout for responsive cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-5">
                     {/* Card 1 */}
-                    <BlurFade delay={0.10 * 5}>
-                      <div className='p-1 border-2 dark:[box-shadow:3px_3px_40px_5px_#c6c6c635_inset]   [box-shadow:3px_3px_40px_5px_#c6c6c635] rounded-md'>
-                      <button
-                        onClick={() => selectSearchMode('creator')}
-                        className="flex w-full h-full  sm:h-50 md:h-70 bg-card-bg border-none dark:border-theme-dark-card dark:bg-theme-dark-card/95 flex-col p-8  border-[0.1px]  rounded-sm text-left transition-all duration-300 ease-in-out hover:shadow-lg hover:border-brand-primary dark:hover:shadow-theme-dark-card hover:-translate-y-1 group flex-grow"
-                      >
-                        <div className="flex items-center gap-4 mb-3">
-                          {/* <UserIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
-                          <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find from Username</h3>
-                        </div>
-                        <p className="text-gray-600 leading-relaxed mb-6 dark:text-theme-dark-subtext">
-                          Find out what makes top accounts tick. We'll pull up their most legendary posts.
-                        </p>
-                        <div className="mt-auto  text-gray-500 dark:text-theme-dark-subtext">
-                          @elonmusk, @naval, @kirat_tw, @mannupaaji →
-                        </div>
-                      </button>
-                      </div>
+                    <BlurFade delay={0.10 * 4}>
+                      <Card
+                        title="Find from Username"
+                        descriptiion="Find out what makes top accounts tick."
+                        names="@elonmusk, @naval, @kirat_tw, @mannupaaji →"
+                        handleClick={() => selectSearchMode('creator')} />
+
                     </BlurFade>
 
                     {/* Card 2 */}
                     <BlurFade delay={0.10 * 5}>
-                      <div className='p-1 border-2 dark:[box-shadow:3px_3px_40px_5px_#c6c6c635_inset] rounded-md'>
-                      <button
-                        onClick={() => selectSearchMode('topic')}
-                        className="flex flex-col w-full h-full sm:h-50 bg-card-bg  border-none dark:border-theme-dark-card dark:bg-theme-dark-card/95  md:h-70 p-8  border-[0.1px]  rounded-sm text-left transition-all duration-300 ease-in-out dark:hover:shadow-theme-dark-card hover:shadow-lg hover:border-brand-primary hover:-translate-y-1 group flex-grow"
-                      >
-                        <div className="flex items-center gap-4 mb-3">
-                          {/* <MagnifyingGlassIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
-                          <h3 className="text-xl font-bold text-gray-900 dark:text-theme-dark-text">Find by Keyword/Topic</h3>
-                        </div>
-                        <p className="text-gray-600 dark:text-theme-dark-subtext leading-relaxed mb-6">
-                          Drop a keyword, find the sauce. See what's actually hitting in any niche.
-                        </p>
-                        <div className="mt-auto  text-gray-500 dark:text-theme-dark-subtext font-mono">
-                          "ai tools", "meme", "sora 2 codes" →
-                        </div>
-                      </button>
-                      </div>
+                      <Card
+                        title="Find by Keyword/Topic"
+                        descriptiion="Uncover the top posts in any niche."
+                        names="ai tools, meme, crypto, productivity →"
+                        handleClick={() => selectSearchMode('topic')}
+                      />
                     </BlurFade>
                   </div>
                 </div>
@@ -439,7 +393,7 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
               <div>
                 <button
                   onClick={goBackToSelection}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-theme-dark-text mb-6 transition-colors"
+                  className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 dark:text-theme-dark-text mb-6 transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to search options
@@ -447,16 +401,11 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
 
                 <div className="text-center mb-8">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    {/* {searchMode === 'topic' ? (
-                      <Hash className="w-6 h-6 text-purple-600" />
-                    ) : (
-                      <User className="w-6 h-6 text-blue-600" />
-                    )} */}
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-theme-dark-text underline underline-offset-5 decoration-[#f54e00] decoration-wavy">
+                    <h2 className="font-bold text-gray-900 dark:text-theme-dark-text underline underline-offset-5 decoration-[#f54e00] decoration-wavy">
                       {searchMode === 'topic' ? 'Find by Keyword/Topic' : 'Find from Username'}
                     </h2>
                   </div>
-                  <p className="text-gray-600 dark:text-theme-dark-subtext">
+                  <p className="text-gray-600 dark:text-theme-dark-subtext text-[10px]">
                     {searchMode === 'topic'
                       ? 'Uncover the top posts in any niche.'
                       : 'Pull the greatest hits from any account.'
@@ -467,253 +416,86 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
                 <div className="space-y-6 mb-8">
                   {searchMode === 'creator' ? (
                     <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700  dark:text-theme-dark-text mb-2">
-                          Creator Username
-                        </label>
-                        <PlaceholdersAndVanishInput
-                          value={username}
-                          setValue={setUsername}
-                          onChange={(e) => setUsername(e.target.value)}
-                          placeholders={popularCreators}
-                        />
-                        {validationErrors.username && (
-                          <p className="mt-1 text-sm text-red-600 flex items-center">
-                            <AlertCircle className="w-4 h-4 mr-1" />
-                            {validationErrors.username}
-                          </p>
-                        )}
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          <span className="text-xs text-gray-500 flex mt-1">Try:</span>
-                          {popularCreators.slice(0, 4).map(creator => (
-                            <button
-                              key={creator}
-                              onClick={() => fillExample(creator, 'creator')}
-                              className="text-xs px-1 py-1 hover:bg-[var(--color-card-bg)] dark:hover:bg-theme-dark-card cursor-pointer rounded transition-colors"
-                            >
-                              @{creator}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 dark:text-theme-dark-text mb-2">
-                          + Keyword Filter <span className="text-gray-500 font-normal dark:text-theme-dark-text">(optional)</span>
-                        </label>
-                        <PlaceholdersAndVanishInput
-                          value={keyword}
-                          setValue={setKeyword}
-                          onChange={(e) => setKeyword(e.target.value)}
-                          placeholders={["AI, startups, productivity..."]}
-                        />
-                      </div>
+                      <SearchInput
+                        label="Creator Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholders={popularCreators}
+                        error={validationErrors.username}
+                        examples={popularCreators.slice(0, 4).map(c => `@${c}`)}
+                        onExampleClick={(example) => fillExample(example.replace('@', ''), 'creator')}
+                      />
+                      <SearchInput
+                        label="+ Keyword Filter (optional)"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                        placeholders={["AI, startups, productivity..."]}
+                      />
                     </div>
                   ) : (
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700  dark:text-theme-dark-text mb-2">
-                        Topic or Keywords
-                      </label>
-                      <PlaceholdersAndVanishInput
-                        value={topicKeywords}
-                        setValue={setTopicKeywords}
-                        onChange={(e) => setTopicKeywords(e.target.value)}
-                        placeholders={popularTopics}
-                      />
-                      {validationErrors.topic && (
-                        <p className="mt-1 text-sm text-red-600 flex items-center">
-                          <AlertCircle className="w-4 h-4 mr-1" />
-                          {validationErrors.topic}
-                        </p>
-                      )}
-                      <p className="text-xs text-shadow-2xs shadow-amber-200 text-gray-500 mt-1">
-                        Use quotes for exact phrases, OR for alternatives
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <span className="text-xs relative top-1 text-gray-500">Popular:</span>
-                        {popularTopics.slice(0, 4).map(topic => (
-                          <button
-                            key={topic}
-                            onClick={() => fillExample(topic, 'topic')}
-                            className={cn("text-xs px-1 py-1 hover:bg-[var(--color-card-bg)] dark:hover:bg-theme-dark-card  dark:text-theme-dark-text text-black rounded",
-                              " transition-colors cursor-pointer"
-                            )}
-                          >
-                            {topic}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                    <SearchInput
+                      label="Topic or Keywords"
+                      value={topicKeywords}
+                      onChange={(e) => setTopicKeywords(e.target.value)}
+                      placeholders={popularTopics}
+                      error={validationErrors.topic}
+                      examples={popularTopics.slice(0, 4)}
+                      onExampleClick={(example) => fillExample(example, 'topic')}
+                      helpText="Use quotes for exact phrases, OR for alternatives"
+                    />
                   )}
                 </div>
 
-                <div className=" rounded-lg p-4 mb-8">
+                <div className="rounded-lg p-4 mb-8">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-gray-900 dark:text-theme-dark-text">Set the Viral Bar</h3>
-                    <div className="flex gap-2">
-                      {presets.map(({ id, label }) => (
-                        <button
-                          key={id}
-                          onClick={() => applyPreset(id)}
-                          className={cn("px-2  py-1 text-[9px] rounded-sm flex items-center ",
-                            "transition-all",
-                            "hover:text-orange bg-[var(--color-card-bg)] dark:bg-theme-dark-card",
-                          )}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
+                    <h3 className="font-semibold text-gray-900 dark:text-theme-dark-text text-[10px]">Set the Viral Bar</h3>
+                    <PresetButtons presets={presets} onPresetClick={applyPreset} />
                   </div>
 
                   <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between text-sm text-gray- dark:text-theme-dark-text mb-2">
-                        <span>Min Likes</span>
-                        <span className="font-medium">{minLikes}</span>
-                      </div>
-                      <StyledSlider
+                    <MinimumBar title="Min Likes" value={minLikes} Slider={<StyledSlider
                         value={minLikes}
                         onChange={(e: any) => setMinLikes(parseInt(e.target.value))}
                         min={0}
                         max={10000}
                         step={50}
-                      />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm text-gray-700 dark:text-theme-dark-text mb-2">
-                        <span>Min Retweets</span>
-                        <span className="font-medium">{minRetweets}</span>
-                      </div>
-                      <StyledSlider
+                      />}/>
+                    <MinimumBar 
+                    title="Min Retweets" 
+                    value={minRetweets} 
+                    Slider={<StyledSlider
                         value={minRetweets}
                         onChange={(e: any) => setMinRetweets(parseInt(e.target.value))}
                         min={0}
                         max={1000}
                         step={10}
-                      />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm text-gray-700 dark:text-theme-dark-text mb-2">
-                        <span>Min Replies</span>
-                        <span className="font-medium">{minReplies}</span>
-                      </div>
-                      <StyledSlider
+                      />}
+                    />
+                    <MinimumBar 
+                    title="Min Replies" 
+                    value={minReplies} 
+                    Slider={<StyledSlider
                         value={minReplies}
                         onChange={(e) => setMinReplies(parseInt(e.target.value))}
                         min={0}
                         max={500}
                         step={5}
-                      />
-                    </div>
+                      />}
+                    />
                   </div>
-
-                  {validationErrors.engagement && (
-                    <p className="mt-3 text-sm text-orange flex items-center">
-                      <AlertCircle className="w-4 h-4 mr-1" />
-                      {validationErrors.engagement}
-                    </p>
-                  )}
-
-                  <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t">
-                    <label className="flex transition items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={mediaOnly}
-                        onChange={(e) => setMediaOnly(e.target.checked)}
-                        className={cn("w-4 h-4 rounded",
-                          "accent-[var(--color-theme-fg)] dark:accent-[var(--color-theme-dark-subtext)]"
-                        )}
-                      />
-                      <span className="text-sm text-gray-700 dark:text-theme-dark-subtext">Media only (images/videos)</span>
-                    </label>
-                    <label className="flex items-center transition  gap-2">
-                      <input
-                        type="checkbox"
-                        checked={excludeRetweets}
-                        onChange={(e) => setExcludeRetweets(e.target.checked)}
-                        className={cn("w-4 h-4 rounded",
-                          "accent-theme-dark dark:accent-theme-bg"
-                        )}
-                      />
-                      <span className="text-sm text-gray-700 dark:text-theme-dark-subtext">Exclude retweets</span>
-                    </label>
-                  </div>
+                  <FilterCheckboxes 
+                    mediaOnly={mediaOnly} 
+                    onMediaOnlyChange={setMediaOnly}
+                    excludeRetweets={excludeRetweets}
+                    onExcludeRetweetsChange={setExcludeRetweets}
+                  />
                 </div>
 
                 {queryPreview && (
-                  <div className="bg-[var(--color-card-bg)] dark:bg-theme-dark-card rounded-lg p-4 mb-6">
-                    <h4 className="font-semibold text-gray-700 mb-2 flex items-center dark:text-theme-dark-subtext text-sm">
-                      <Search className="w-4 h-4 mr-2 stroke-[var(--color-orange)]" />
-                      Your X Search Query
-                    </h4>
-                    <code className="text-xs text-gray-800  dark:text-theme-dark-subtext block bg-[var(--color-theme-bg)]  dark:bg-theme-dark p-2 rounded break-all">
-                      {queryPreview}
-                    </code>
-                  </div>
+                  <QueryPreview query={queryPreview} />
                 )}
-
-                {/* {feedback && (
-                <div className={`border rounded-lg p-3 mb-6 flex items-center gap-2 text-sm ${
-                  feedback.type === 'warning' ? 'bg-amber-50 border-amber-200 text-amber-800' :
-                  feedback.type === 'info' ? 'bg-blue-50 border-blue-200 text-blue-800' :
-                  'bg-green-50 border-green-200 text-green-800'
-                }`}>
-                  <Info className="w-4 h-4 flex-shrink-0" />
-                  {feedback.message}
-                </div>
-              )}
-               */}
                 {generatedUrl && (
-                  <div className=" rounded-lg">
-                    <h3 className="font-semibold dark:text-theme-dark-text text-h1 mb-4 inline-flex items-center">
-                      Search URL Generated
-                    </h3>
-
-                    <div className="bg-[var(--color-card-bg)] dark:bg-theme-dark-card p-3 rounded-lg border mb-4 overflow-x-auto">
-                      <code className="text-xs text-gray-700 break-all  dark:text-theme-dark-subtext">
-                        {generatedUrl}
-                      </code>
-                    </div>
-
-                    <div className="flex gap-3 w-full">
-                      <button
-                        onClick={openInNewTab}
-                        className={cn("flex-1 bg-theme-fg dark:bg-theme-dark-card [box-shadow:3px_3px_40px_5px_#c6c6c635_inset]  hover:shadow-none text-white font-medium",
-                          "py-3 px-4 rounded-lg",
-                          "transition-colors flex items-center justify-center gap-2",
-                          "hover:bg-gray-950 ",
-                          "transition-all duration-150 ")}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Open in X
-                      </button>
-
-                      {/* <div className=''> */}
-                      <button
-                        onClick={copyToClipboard}
-                        className={cn(`justify-center rounded-lg border-2 gap-2 ${copied
-                          ? 'bg-[var(--color-orange)] text-white'
-                          : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                          }`,
-                          "font-medium text-sm transition-colors flex items-center",
-                          "w-[calc(100%-80%)] text-center",
-                          "transition-all duration-150 hover:scale-[0.98] cursor-pointer",
-                          "md:flex hidden"
-                        )}
-                      >
-                        <Copy className="w-4 h-4" />
-                        {copied ? 'Copied!' : 'Copy'}
-                      </button>
-                      {/* </div> */}
-                    </div>
-
-                    <div className="mt-4 p-3  rounded-lg">
-                      <p className="text-xs flex items-center gap-1 dark:text-theme-dark-subtext">
-                        <span>Not enough hits? Try lowering the engagement bar or use a preset like "Low Viral".
-                        </span>
-                      </p>
-                    </div>
-                  </div>
+                  <GeneratedUrl url={generatedUrl} onOpen={openInNewTab} />
                 )}
               </div>
             )}
@@ -727,8 +509,8 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
             className="w-full px-6 py-4 flex items-center justify-between text-left  hover:bg-gray-50  dark:hover:bg-theme-dark-card shadow rounded transition-colors text-"
           >
             <div className="flex items-center gap-2">
-              <History className="w-5 h-5 text-gray-600 dark:text-theme-dark-text" />
-              <span className="font-medium text-gray-900 dark:text-theme-dark-text">
+              <History className="size-3 text-gray-600 dark:text-theme-dark-text" />
+              <span className="font-medium text-[10px] text-gray-900 dark:text-theme-dark-text">
                 Search History ({searchHistory.length})
               </span>
             </div>
@@ -738,7 +520,7 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
           {showHistory && (
             <div className="border-t px-6 pb-4">
               {searchHistory.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-8">
+                <p className="text-[10px] text-gray-500 text-center py-8">
                   go search first !!!
                 </p>
               ) : (
@@ -747,7 +529,7 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
                     <span className="text-xs text-gray-500">Recent searches</span>
                     <button
                       onClick={clearHistory}
-                      className="text-xs text-red-500 hover:text-red-700 dark:text-red-500 flex items-center gap-1 cursor-pointer"
+                      className="text-[10px] text-red-500 hover:text-red-700 dark:text-red-500 flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                       Clear All
@@ -757,38 +539,14 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
                   {searchHistory.slice(0, 5).map((item: any) => {
                     const formatted = formatHistoryItem(item);
                     return (
-                      <div key={item.id} className="flex items-center justify-between p-3 bg-[var(--color-card-bg)]  dark:bg-theme-dark-card rounded-lg text-sm">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <p className="font-medium text-gray-900 dark:text-theme-dark-text truncate">
-                              {formatted.title}
-                            </p>
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            {formatted.subtitle} • {formatted.date}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => loadFromHistory(item)}
-                            className="text-gray-600 hover:text-gray-700  text-xs cursor-pointer hover:underline flex items-center bg gap-1 px-2 py-1"
-                          >
-                            Load
-                          </button>
-                          <button
-                            onClick={() => window.open(item.url, '_blank')}
-                            className="text-gray-600 hover:text-gray-700 text-xs cursor-pointer hover:underline flex items-center gap-1 px-2 py-1"
-                          >
-                            Open
-                          </button>
-                          <button
-                            onClick={() => deleteHistoryItem(item.id)}
-                            className="text-gray-600 hover:text-gray-700 text-xs cursor-pointer hover:underline"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
+                      <HistoryItem
+                        key={item.id}
+                        item={item}
+                        formatted={formatted}
+                        onLoad={() => loadFromHistory(item)}
+                        onOpen={() => window.open(item.url, '_blank')}
+                        onDelete={() => deleteHistoryItem(item.id)}
+                      />
                     );
                   })}
                 </div>
@@ -798,16 +556,10 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
         </div>
 
         <div className="text-center my-8 text-gray-600  space-y-1 dark:text-theme-dark-text">
-          <p className="text">
+          <p className="text-[10px]">
             Your cheat code for viral content. No limits.
           </p>
           <div className='flex flex-col space-y-1'>
-          {/* <Link href={"https://x.com/eeshmidha1"} target='_blank' className='underline underline-offset-2 '>
-          created by eesh
-          </Link> */}
-          {/* <Link href={tweetUrl} className='underline text-[10px]'>
-          share on x <ExternalLink className='inline-flex size-2'/>
-          </Link> */}
           </div>
         </div>
       </div>
@@ -816,3 +568,276 @@ const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText
 };
 
 export default TwitterSearchGenerator;
+
+
+
+
+export const Card = ({ title, descriptiion, names, handleClick }: { title: string, descriptiion: string, names: string, handleClick: () => void }) => {
+  return (
+    <div className='p-1 border-2 dark:[box-shadow:3px_3px_40px_5px_#c6c6c635_inset] [box-shadow:3px_3px_40px_5px_#c6c6c635] rounded-md '>
+      <button
+        onClick={handleClick}
+        className="flex w-full h-full  sm:h-50 md:h-50 bg-card-bg border-none dark:border-theme-dark-card dark:bg-theme-dark-card/95 flex-col p-8  border-[0.1px]  rounded-sm text-left transition-all duration-300 ease-in-out hover:shadow-lg hover:border-brand-primary dark:hover:shadow-theme-dark-card hover:-translate-y-1 group flex-grow"
+      >
+        <div className="flex items-center gap-4 mb-3">
+          {/* <UserIcon className="h-7 w-7 text-gray-400 group-hover:text-brand-primary transition-colors" /> */}
+          <h3 className="text-sm font-bold text-gray-900 dark:text-theme-dark-text">{title}</h3>
+        </div>
+        <p className="text-gray-600 leading-relaxed mb-4 text-xs dark:text-theme-dark-subtext">
+          {descriptiion}
+        </p>
+        <div className="mt-auto text-[10px] text-gray-500 dark:text-theme-dark-subtext">
+          {names}
+        </div>
+      </button>
+    </div>
+  )
+}
+
+
+
+export const MinimumBar = ({title, value, Slider}: {title: string, value: number, Slider: React.ReactNode}) => {
+  return (
+    <div>
+      <div className="flex justify-between text-[10px] text-gray-700 dark:text-theme-dark-text mb-2">
+        <span>{title}</span>
+        <span className="font-medium text-[10px]">{value}</span>
+      </div>
+      {Slider}
+    </div>
+  )
+}
+
+// SearchInput Component - Reusable for both creator and topic inputs
+export const SearchInput = ({ 
+  label, 
+  value, 
+  onChange, 
+  placeholders, 
+  error,
+  examples,
+  onExampleClick,
+  helpText
+}: { 
+  label: string, 
+  value: string, 
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  placeholders: string[],
+  error?: string,
+  examples?: string[],
+  onExampleClick?: (example: string) => void,
+  helpText?: string
+}) => {
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-gray-700 dark:text-theme-dark-text mb-2">
+        {label}
+      </label>
+      <PlaceholdersAndVanishInput
+        value={value}
+        setValue={(val: string) => {}}
+        onChange={onChange}
+        placeholders={placeholders}
+      />
+      {error && (
+        <p className="mt-1 text-[10px] text-red-600 flex items-center">
+          <AlertCircle className="w-4 h-4 mr-1" />
+          {error}
+        </p>
+      )}
+      {helpText && (
+        <p className="text-[10px] text-gray-500 mt-1">
+          {helpText}
+        </p>
+      )}
+      {examples && onExampleClick && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          <span className="text-[10px] text-gray-500 flex mt-1">Try:</span>
+          {examples.map(example => (
+            <button
+              key={example}
+              onClick={() => onExampleClick(example)}
+              className="text-[10px] px-1 py-1 hover:bg-[var(--color-card-bg)] dark:hover:bg-theme-dark-card cursor-pointer rounded transition-colors"
+            >
+              {example}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// PresetButtons Component
+export const PresetButtons = ({ 
+  presets, 
+  onPresetClick 
+}: { 
+  presets: Array<{id: string, label: string}>,
+  onPresetClick: (id: string) => void
+}) => {
+  return (
+    <div className="flex gap-2">
+      {presets.map(({ id, label }) => (
+        <button
+          key={id}
+          onClick={() => onPresetClick(id)}
+          className={cn("px-2 text-[8px] font-sans py-1 rounded-sm flex items-center",
+            "transition-all",
+            "hover:text-orange bg-[var(--color-card-bg)] dark:bg-theme-dark-card",
+          )}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// FilterCheckboxes Component
+export const FilterCheckboxes = ({ 
+  mediaOnly, 
+  onMediaOnlyChange, 
+  excludeRetweets, 
+  onExcludeRetweetsChange 
+}: { 
+  mediaOnly: boolean,
+  onMediaOnlyChange: (checked: boolean) => void,
+  excludeRetweets: boolean,
+  onExcludeRetweetsChange: (checked: boolean) => void
+}) => {
+  return (
+    <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t">
+      <label className="flex transition items-center gap-2">
+        <input
+          type="checkbox"
+          checked={mediaOnly}
+          onChange={(e) => onMediaOnlyChange(e.target.checked)}
+          className={cn("w-4 h-4 rounded",
+            "accent-[var(--color-theme-fg)] dark:accent-[var(--color-theme-dark-subtext)]"
+          )}
+        />
+        <span className="text-[10px] text-gray-700 dark:text-theme-dark-subtext">Media only (images/videos)</span>
+      </label>
+      <label className="flex items-center transition gap-2">
+        <input
+          type="checkbox"
+          checked={excludeRetweets}
+          onChange={(e) => onExcludeRetweetsChange(e.target.checked)}
+          className={cn("w-4 h-4 rounded",
+            "accent-theme-dark dark:accent-theme-bg"
+          )}
+        />
+        <span className="text-[10px] text-gray-700 dark:text-theme-dark-subtext">Exclude retweets</span>
+      </label>
+    </div>
+  )
+}
+
+// QueryPreview Component
+export const QueryPreview = ({ query }: { query: string }) => {
+  return (
+    <div className="bg-[var(--color-card-bg)] dark:bg-theme-dark-card rounded-lg p-4 mb-6">
+      <h4 className="font-semibold text-[10px] text-gray-700 mb-2 flex items-center dark:text-theme-dark-subtext">
+        <Search className="w-4 h-4 mr-2 stroke-[var(--color-orange)]" />
+        Your X Search Query
+      </h4>
+      <code className="text-[10px] text-gray-800 dark:text-theme-dark-subtext block bg-[var(--color-theme-bg)] dark:bg-theme-dark p-2 rounded break-all">
+        {query}
+      </code>
+    </div>
+  )
+}
+
+// GeneratedUrl Component
+export const GeneratedUrl = ({ 
+  url, 
+  onOpen 
+}: { 
+  url: string,
+  onOpen: () => void
+}) => {
+  return (
+    <div className="rounded-lg">
+      <h3 className="font-semibold text-[10px] dark:text-theme-dark-text text-h1 mb-4 inline-flex items-center">
+        Search URL Generated
+      </h3>
+
+      <div className="bg-[var(--color-card-bg)] dark:bg-theme-dark-card p-3 rounded-lg border mb-4 overflow-x-auto">
+        <code className="text-[10px] text-gray-700 break-all dark:text-theme-dark-subtext">
+          {url}
+        </code>
+      </div>
+
+      <div className="flex gap-3 w-full">
+        <button
+          onClick={onOpen}
+          className={cn("flex-1 bg-theme-fg dark:bg-theme-dark-card [box-shadow:3px_3px_40px_5px_#c6c6c635_inset] hover:shadow-none text-white font-medium",
+            "py-3 px-4 rounded-lg",
+            "flex items-center justify-center gap-2",
+            "hover:bg-gray-950",
+            "transition-colors duration-300 cursor-pointer text-xs")}
+        >
+          <ExternalLink className="size-3" />
+          Open in X
+        </button>
+      </div>
+
+      <div className="mt-4 p-3 rounded-lg">
+        <p className="text-[10px] flex items-center gap-1 dark:text-theme-dark-subtext">
+          <span>Not enough hits? Use a preset like "Low Viral".</span>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// HistoryItem Component
+export const HistoryItem = ({ 
+  item, 
+  formatted, 
+  onLoad, 
+  onOpen, 
+  onDelete 
+}: { 
+  item: any,
+  formatted: any,
+  onLoad: () => void,
+  onOpen: () => void,
+  onDelete: () => void
+}) => {
+  return (
+    <div className="flex items-center justify-between p-3 bg-[var(--color-card-bg)] dark:bg-theme-dark-card rounded-lg text-[10px]">
+      <div className="flex-1">
+        <div className="flex items-center gap-2 mb-1">
+          <p className="font-medium text-gray-900 dark:text-theme-dark-text truncate">
+            {formatted.title}
+          </p>
+        </div>
+        <p className="text-[10px] text-gray-500">
+          {formatted.subtitle} • {formatted.date}
+        </p>
+      </div>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={onLoad}
+          className="text-gray-600 text-[10px] hover:text-gray-700 cursor-pointer hover:underline flex items-center gap-1 px-2 py-1"
+        >
+          Load
+        </button>
+        <button
+          onClick={onOpen}
+          className="text-gray-600 text-[10px] hover:text-gray-700 cursor-pointer hover:underline flex items-center gap-1 px-2 py-1"
+        >
+          Open
+        </button>
+        <button
+          onClick={onDelete}
+          className="text-gray-600 hover:text-gray-700 text-[10px] cursor-pointer hover:underline"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  )
+}

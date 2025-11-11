@@ -117,7 +117,7 @@ return (
         <div className="flex justify-between mx-4 mt-4">
           <div className="p-2">
           <Link href={"https://github.com/eeshm/bangerx"} target="_blank">
-          <Github className="size-6 stroke-[1.5px]"/>
+          <Github className="size-4 stroke-[1.5px]"/>
           </Link>
           </div>
           <div>
