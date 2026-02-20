@@ -343,7 +343,7 @@ const TwitterSearchGenerator = () => {
           <div className="text-center mb-8">
             <BlurFade delay={0.10}>
               <div className="flex items-center justify-center gap-3 mb-4">
-                <h1 className="text-4xl font-bold text-gray-900 tracking-tight dark:text-theme-dark-text">
+                <h1 className="text-4xl font-bold text-gray-900 tracking-tight dark:text-theme-dark-text" style={{fontWeight: 600,fontSize:50 }}>
                   BangerX
                 </h1>
               </div>
@@ -359,7 +359,7 @@ const TwitterSearchGenerator = () => {
               <div className="bg-brand-bg flex justify-center p-4 sm:p-6 lg:p-8 scroll-smooth">
                 <div className="max-w-4xl w-full mx-auto text-center">
                   <BlurFade delay={0.10 * 3}>
-                    <h2 className="text-xl sm:text-2xl tracking-tighter font-bold text-gray-800 dark:text-theme-dark-text mb-4">
+                    <h2 className="text-xl sm:text-2xl tracking-tighter font-bold text-gray-800 dark:text-theme-dark-text mb-4" style={{ fontWeight: 700 }}>
                       How we huntin' today?
                     </h2>
                   </BlurFade>
